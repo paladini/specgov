@@ -8,18 +8,139 @@
     />
     <meta
       name="description"
-      content="SpecGov is a deterministic governance layer for keeping specs, ADRs, requirements, and code changes aligned in Git repositories."
+      content="SpecGov is a deterministic spec governance CLI and GitHub Action for keeping requirements, ADRs, product docs, and code changes aligned in Git."
     />
+    <meta name="author" content="Fernando Paladini" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <link rel="canonical" href="https://paladini.github.io/specgov/" />
     <meta name="theme-color" content="#f7fbf4" />
-    <meta property="og:title" content="SpecGov" />
+    <meta property="og:site_name" content="SpecGov" />
+    <meta
+      property="og:title"
+      content="SpecGov - Deterministic Spec Governance for Git"
+    />
     <meta
       property="og:description"
-      content="Govern the specs your code is supposed to honor."
+      content="Keep requirements, ADRs, product docs, and code changes aligned in pull requests without API keys or model calls."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://paladini.github.io/specgov/" />
-    <title>SpecGov | Spec governance for Git repositories</title>
+    <meta
+      property="og:image"
+      content="https://paladini.github.io/specgov/assets/specgov-report.svg"
+    />
+    <meta
+      property="og:image:alt"
+      content="SpecGov pull request report showing deterministic spec governance findings."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="SpecGov - Deterministic Spec Governance for Git"
+    />
+    <meta
+      name="twitter:description"
+      content="A local-first CLI and GitHub Action for requirements traceability, ADR governance, and pull request spec checks."
+    />
+    <meta
+      name="twitter:image"
+      content="https://paladini.github.io/specgov/assets/specgov-report.svg"
+    />
+    <meta name="application-name" content="SpecGov" />
+    <title>SpecGov - Spec Governance for Git Pull Requests</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="assets/specgov-report.svg"
+      as="image"
+      type="image/svg+xml"
+    />
     <link rel="stylesheet" href="styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://paladini.github.io/specgov/#website",
+            "name": "SpecGov",
+            "url": "https://paladini.github.io/specgov/",
+            "description": "Deterministic spec governance for Git repositories.",
+            "inLanguage": "en",
+            "publisher": {
+              "@id": "https://paladini.github.io/specgov/#person"
+            }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://paladini.github.io/specgov/#person",
+            "name": "Fernando Paladini",
+            "url": "https://github.com/paladini",
+            "sameAs": ["https://github.com/paladini"]
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://paladini.github.io/specgov/#software",
+            "name": "SpecGov",
+            "url": "https://paladini.github.io/specgov/",
+            "codeRepository": "https://github.com/paladini/specgov",
+            "description": "SpecGov is a deterministic CLI and GitHub Action that keeps requirements, ADRs, product docs, and code changes aligned in Git pull requests.",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Cross-platform",
+            "programmingLanguage": "TypeScript",
+            "runtimePlatform": "Node.js",
+            "softwareRequirements": "Node.js 20 or newer",
+            "license": "https://github.com/paladini/specgov/blob/main/LICENSE",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "featureList": [
+              "Spec-to-code path mappings",
+              "Pull request spec impact checks",
+              "Lifecycle and drift reporting",
+              "Markdown, JSON, and GitHub Action outputs",
+              "Advisory and strict enforcement modes"
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://paladini.github.io/specgov/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What does SpecGov check?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "SpecGov checks whether changed code paths map to requirements, ADRs, product docs, or spec folders and reports missing spec impact, stale artifacts, lifecycle gaps, and unmapped code."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does SpecGov need API keys or model calls?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. SpecGov runs locally and in CI with deterministic checks, so it does not require API keys, hosted services, or model calls."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can SpecGov work with existing spec formats?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. SpecGov maps existing docs, ADRs, .specs folders, Kiro specs, Spec Kit files, or custom paths through a small .specgov.yml manifest."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -30,39 +151,65 @@
         <span>SpecGov</span>
       </a>
       <nav class="nav-links" aria-label="Primary navigation">
-        <a href="#how-it-works">How it works</a>
-        <a href="#quickstart">Quick start</a>
-        <a href="#action">GitHub Action</a>
-        <a href="https://github.com/paladini/specgov">GitHub</a>
+        <a class="nav-link" href="#how-it-works">How it works</a>
+        <a class="nav-link" href="#quickstart">Quick start</a>
+        <a class="nav-link" href="#action">GitHub Action</a>
+        <a class="nav-link" href="#faq">FAQ</a>
+        <a
+          class="github-link"
+          href="https://github.com/paladini/specgov"
+          aria-label="Open SpecGov on GitHub"
+          rel="noopener"
+        >
+          <svg
+            class="github-icon"
+            viewBox="0 0 16 16"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              d="M8 0C3.58 0 0 3.67 0 8.2c0 3.62 2.29 6.69 5.47 7.78.4.08.55-.18.55-.4 0-.2-.01-.86-.01-1.56-2.01.38-2.53-.5-2.69-.96-.09-.24-.48-.96-.82-1.15-.28-.16-.68-.55-.01-.56.63-.01 1.08.59 1.23.84.72 1.24 1.87.89 2.33.68.07-.53.28-.89.51-1.09-1.78-.21-3.64-.91-3.64-4.04 0-.89.31-1.62.82-2.19-.08-.21-.36-1.04.08-2.16 0 0 .67-.22 2.2.84A7.43 7.43 0 0 1 8 3.96c.68 0 1.36.09 2 .27 1.53-1.06 2.2-.84 2.2-.84.44 1.12.16 1.95.08 2.16.51.57.82 1.3.82 2.19 0 3.14-1.87 3.83-3.65 4.04.29.26.54.76.54 1.53 0 1.1-.01 1.99-.01 2.27 0 .22.15.48.55.4A8.12 8.12 0 0 0 16 8.2C16 3.67 12.42 0 8 0Z"
+            />
+          </svg>
+          GitHub
+        </a>
       </nav>
     </header>
 
     <main id="main">
       <section class="hero" id="top" aria-labelledby="hero-title">
-        <img
-          class="hero-visual"
-          src="assets/specgov-report.svg"
-          alt="SpecGov pull request report showing an advisory warning for a code change without related spec impact."
-        />
-        <div class="hero-copy">
-          <p class="eyebrow">Deterministic spec governance for Git</p>
-          <h1 id="hero-title">
-            Govern the specs your code is supposed to honor.
-          </h1>
-          <p class="lede">
-            SpecGov keeps requirements, ADRs, product docs, and spec folders
-            aligned with pull requests without API keys, hosted services, or
-            model calls.
-          </p>
-          <div class="hero-actions" aria-label="Primary actions">
-            <a class="button primary" href="#quickstart">Start using SpecGov</a>
-            <a
-              class="button secondary"
-              href="https://github.com/paladini/specgov"
-            >
-              View source
-            </a>
+        <div class="hero-inner">
+          <div class="hero-copy">
+            <p class="eyebrow">Deterministic spec governance for Git</p>
+            <h1 id="hero-title">
+              Govern the specs your code is supposed to honor.
+            </h1>
+            <p class="lede">
+              SpecGov keeps requirements, ADRs, product docs, and spec folders
+              aligned with pull requests without API keys, hosted services, or
+              model calls.
+            </p>
+            <div class="hero-actions" aria-label="Primary actions">
+              <a class="button primary" href="#quickstart"
+                >Start using SpecGov</a
+              >
+              <a
+                class="button secondary"
+                href="https://github.com/paladini/specgov"
+              >
+                View source
+              </a>
+            </div>
           </div>
+          <figure class="hero-visual-frame">
+            <img
+              class="hero-visual"
+              src="assets/specgov-report.svg"
+              width="1120"
+              height="760"
+              alt="SpecGov pull request report showing an advisory warning for a code change without related spec impact."
+            />
+          </figure>
         </div>
       </section>
 
@@ -310,6 +457,38 @@ jobs:
               View example
             </a>
           </article>
+        </div>
+      </section>
+
+      <section class="section faq-section" id="faq" aria-labelledby="faq-title">
+        <div class="section-heading">
+          <p class="eyebrow">Searchable answers</p>
+          <h2 id="faq-title">Spec governance without a new process.</h2>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>What does SpecGov check?</summary>
+            <p>
+              SpecGov checks whether changed code paths map to requirements,
+              ADRs, product docs, or spec folders. It reports missing spec
+              impact, stale artifacts, lifecycle gaps, and unmapped code.
+            </p>
+          </details>
+          <details>
+            <summary>Does SpecGov need API keys or model calls?</summary>
+            <p>
+              No. SpecGov runs locally and in CI with deterministic checks, so
+              it does not require API keys, hosted services, or model calls.
+            </p>
+          </details>
+          <details>
+            <summary>Can SpecGov work with existing spec formats?</summary>
+            <p>
+              Yes. SpecGov maps existing docs, ADRs, .specs folders, Kiro specs,
+              Spec Kit files, or custom paths through a small .specgov.yml
+              manifest.
+            </p>
+          </details>
         </div>
       </section>
     </main>
