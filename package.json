@@ -1,0 +1,56 @@
+{
+  "name": "specgov",
+  "version": "0.1.0",
+  "description": "Spec governance layer for Git repositories.",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "specgov": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "action.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
+    "build": "npm run clean && tsc -p tsconfig.json && npm run build:action",
+    "build:action": "ncc build src/action.ts -o dist/action -m --license licenses.txt",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "format:check": "prettier --check ."
+  },
+  "keywords": [
+    "specs",
+    "governance",
+    "git",
+    "requirements",
+    "traceability",
+    "github-action"
+  ],
+  "author": "Fernando Paladini",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@actions/core": "^3.0.1",
+    "commander": "^15.0.0",
+    "fast-glob": "^3.3.3",
+    "picomatch": "^4.0.4",
+    "yaml": "^2.9.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.0.1",
+    "@types/picomatch": "^4.0.3",
+    "@vercel/ncc": "^0.44.0",
+    "eslint": "^10.6.0",
+    "prettier": "^3.9.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.62.0",
+    "vitest": "^4.1.9"
+  }
+}

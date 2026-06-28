@@ -1,0 +1,38 @@
+version: 1
+mode: advisory
+
+artifacts:
+  - path: "README.md"
+    kind: documentation
+    owner: maintainers
+    status: active
+  - path: ".specs/**/*.md"
+    kind: specification
+    owner: maintainers
+    status: active
+  - path: "examples/**/*.yml"
+    kind: example
+    owner: maintainers
+    status: active
+
+mappings:
+  - code: "src/**"
+    specs:
+      - ".specs/features/specgov-core/**"
+      - "README.md"
+  - code: "action.yml"
+    specs:
+      - ".specs/features/specgov-core/**"
+      - "README.md"
+
+rules:
+  require_spec_impact_for_code_changes: true
+  require_lifecycle_status: false
+  require_owner_for_active_specs: false
+  stale_after_days: 180
+
+ignore:
+  - "node_modules/**"
+  - "dist/**"
+  - ".git/**"
+  - "coverage/**"

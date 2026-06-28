@@ -1,0 +1,36 @@
+name: SpecGov
+description: Validate spec governance impact for Git pull requests.
+author: Fernando Paladini
+
+inputs:
+  config:
+    description: Path to the SpecGov manifest.
+    required: false
+    default: .specgov.yml
+  mode:
+    description: Enforcement mode. Use advisory for warnings only or strict to fail on governance findings.
+    required: false
+    default: advisory
+  base-ref:
+    description: Base git ref for pull request comparison.
+    required: false
+  head-ref:
+    description: Head git ref for pull request comparison.
+    required: false
+  output-format:
+    description: Report format for logs and the report-json output.
+    required: false
+    default: markdown
+  changed-files:
+    description: Optional newline-delimited changed files. Overrides git diff discovery when provided.
+    required: false
+
+outputs:
+  status:
+    description: "SpecGov status: pass, warn, fail, or error."
+  report-json:
+    description: JSON report for downstream automation.
+
+runs:
+  using: node20
+  main: dist/action/index.js

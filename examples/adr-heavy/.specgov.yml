@@ -1,0 +1,26 @@
+version: 1
+mode: strict
+
+artifacts:
+  - path: "adr/**/*.md"
+    kind: decision
+    owner: architecture
+  - path: "docs/product/**/*.md"
+    kind: requirements
+    owner: product
+
+mappings:
+  - code: "src/payments/**"
+    specs:
+      - "adr/payments/**"
+      - "docs/product/payments/**"
+  - code: "src/auth/**"
+    specs:
+      - "adr/auth/**"
+      - "docs/product/auth/**"
+
+rules:
+  require_spec_impact_for_code_changes: true
+  require_lifecycle_status: true
+  require_owner_for_active_specs: true
+  stale_after_days: 120

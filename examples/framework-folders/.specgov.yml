@@ -1,0 +1,26 @@
+version: 1
+mode: advisory
+
+artifacts:
+  - path: ".specs/**/*.md"
+    kind: specification
+    owner: engineering
+  - path: ".kiro/specs/**/*.md"
+    kind: specification
+    owner: engineering
+  - path: "specs/**/*.md"
+    kind: specification
+    owner: engineering
+
+mappings:
+  - code: "src/**"
+    specs:
+      - ".specs/**"
+      - ".kiro/specs/**"
+      - "specs/**"
+
+rules:
+  require_spec_impact_for_code_changes: true
+  require_lifecycle_status: false
+  require_owner_for_active_specs: false
+  stale_after_days: 180
