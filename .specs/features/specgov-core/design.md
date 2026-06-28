@@ -98,10 +98,11 @@ interface SpecGovReport {
 
 ## Tech Decisions
 
-| Decision        | Choice                 | Rationale                                                  |
-| --------------- | ---------------------- | ---------------------------------------------------------- |
-| Manifest format | YAML                   | Readable and familiar in CI.                               |
-| CLI stack       | TypeScript + commander | Good fit for GitHub Action and npm distribution.           |
-| Matching        | fast-glob + picomatch  | Reliable glob discovery and matching.                      |
-| Action bundle   | @vercel/ncc            | GitHub Actions require runtime dependencies to be bundled. |
-| AI audit        | Out of core v1         | Keeps OSS adoption easy and deterministic.                 |
+| Decision        | Choice                 | Rationale                                                        |
+| --------------- | ---------------------- | ---------------------------------------------------------------- |
+| Manifest format | YAML                   | Readable and familiar in CI.                                     |
+| CLI stack       | TypeScript + commander | Good fit for GitHub Action and npm distribution.                 |
+| Matching        | fast-glob + picomatch  | Reliable glob discovery and matching.                            |
+| Action bundle   | @vercel/ncc            | GitHub Actions require runtime dependencies to be bundled.       |
+| Action runtime  | Node 24                | GitHub Actions warns that Node 20 actions are forced to Node 24. |
+| AI audit        | Out of core v1         | Keeps OSS adoption easy and deterministic.                       |

@@ -16,6 +16,7 @@
 
 - SpecGov must stay distinct from SpecTrace for AI Coding: SpecTrace checks evidence for a specific implementation change; SpecGov governs living spec artifacts across Git workflows.
 - The v1 smoke test should include both advisory warnings and strict failures so users can trust the opt-in enforcement mode before adopting it.
+- GitHub Actions now warns that Node 20 actions are forced to Node 24, so SpecGov's own Action and CI target Node 24 while the CLI package can still support Node 20+.
 
 ## Deferred Ideas
 
