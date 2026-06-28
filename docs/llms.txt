@@ -1,0 +1,26 @@
+# SpecGov
+
+SpecGov is a deterministic spec governance CLI and GitHub Action for Git repositories.
+
+Official site: https://paladini.github.io/specgov/
+Source repository: https://github.com/paladini/specgov
+License: MIT
+Runtime: Node.js 20 or newer
+
+## What SpecGov Does
+
+SpecGov keeps requirements, ADRs, product docs, and spec folders aligned with pull requests. It uses a small `.specgov.yml` manifest to map code paths to governed artifacts and reports missing spec impact, unmapped code, lifecycle gaps, and stale artifacts.
+
+## Key Capabilities
+
+- Deterministic local and CI checks with no API keys, hosted services, or model calls.
+- Advisory mode for non-blocking rollout and strict mode for enforced governance.
+- Markdown reports, JSON trace output, and a GitHub Action wrapper.
+- Compatibility with existing docs, ADRs, `.specs`, Kiro specs, Spec Kit files, and custom folders.
+
+## Useful Entrypoints
+
+- Quick start: https://paladini.github.io/specgov/#quickstart
+- Manifest example: https://paladini.github.io/specgov/#manifest
+- GitHub Action setup: https://paladini.github.io/specgov/#action
+- FAQ: https://paladini.github.io/specgov/#faq
