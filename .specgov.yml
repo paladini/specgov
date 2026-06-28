@@ -24,6 +24,10 @@ mappings:
     specs:
       - ".specs/features/specgov-core/**"
       - "README.md"
+  - code: ".github/workflows/**"
+    specs:
+      - ".specs/features/specgov-core/**"
+      - "README.md"
 
 rules:
   require_spec_impact_for_code_changes: true
