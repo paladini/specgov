@@ -18,6 +18,8 @@
 - The v1 smoke test should include both advisory warnings and strict failures so users can trust the opt-in enforcement mode before adopting it.
 - GitHub Actions now warns that Node 20 actions are forced to Node 24, so SpecGov's own Action and CI target Node 24 while the CLI package can still support Node 20+.
 - GitHub's official checkout and setup-node v5 tags exist and avoid the Node 20 runtime warning emitted by v4.
+- Public project education lives in the README and the static GitHub Pages site
+  under `docs/`. The Pages workflow deploys the `docs` directory from `main`.
 
 ## Deferred Ideas
 
