@@ -18,6 +18,7 @@
 
 - Example manifests for docs-only, ADR-heavy, and spec-framework repos.
 - README quickstart.
+- GitHub Pages product site for global project adoption.
 - Contribution and security docs.
 
 ## Later

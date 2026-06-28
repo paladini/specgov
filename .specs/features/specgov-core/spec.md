@@ -87,3 +87,4 @@ Spec-driven development creates useful artifacts, but those artifacts drift when
 - [x] `npm run lint` passes.
 - [x] `npm run typecheck` passes.
 - [x] README quickstart commands are locally verified.
+- [x] GitHub Pages documentation site is available from `docs/`.

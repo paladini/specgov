@@ -99,10 +99,11 @@ T4 + T5 + T6 -> T7 -> T8
 
 ### T8: Validate and Publish
 
-**What**: Run release checks, commit atomically, create public GitHub repo, push, and verify remote.
+**What**: Run release checks, commit atomically, create public GitHub repo, add
+README and GitHub Pages adoption docs, push, and verify remote.
 **Where**: repository
 **Depends on**: T7
 **Requirement**: SGOV-05
 **Tests**: full
 **Gate**: `npm test`, `npm run build`, `npm run lint`, `npm run typecheck`
-**Status**: In Progress
+**Status**: Done

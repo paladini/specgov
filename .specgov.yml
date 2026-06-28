@@ -6,6 +6,10 @@ artifacts:
     kind: documentation
     owner: maintainers
     status: active
+  - path: "docs/**/*"
+    kind: documentation
+    owner: maintainers
+    status: active
   - path: ".specs/**/*.md"
     kind: specification
     owner: maintainers

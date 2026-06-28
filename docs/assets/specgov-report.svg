@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="760" viewBox="0 0 1120 760" role="img" aria-labelledby="title desc">
+  <title id="title">SpecGov check-pr report</title>
+  <desc id="desc">A terminal-style SpecGov report showing advisory mode with one missing spec impact warning.</desc>
+  <rect width="1120" height="760" rx="18" fill="#193429"/>
+  <rect x="24" y="24" width="1072" height="712" rx="14" fill="#fbfff8"/>
+  <rect x="24" y="24" width="1072" height="72" rx="14" fill="#183126"/>
+  <circle cx="64" cy="60" r="10" fill="#ed6a5a"/>
+  <circle cx="96" cy="60" r="10" fill="#f4bf4f"/>
+  <circle cx="128" cy="60" r="10" fill="#61c554"/>
+  <text x="174" y="67" fill="#eaf5e7" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">specgov check-pr</text>
+  <rect x="68" y="134" width="984" height="546" rx="10" fill="#10261d"/>
+  <text x="104" y="188" fill="#dff4df" font-family="Cascadia Mono, Consolas, monospace" font-size="30" font-weight="700"># SpecGov check-pr report</text>
+  <text x="104" y="252" fill="#cfe7d1" font-family="Cascadia Mono, Consolas, monospace" font-size="25">Status: </text>
+  <rect x="226" y="224" width="94" height="40" rx="6" fill="#f1b84b"/>
+  <text x="244" y="252" fill="#1d2b1e" font-family="Cascadia Mono, Consolas, monospace" font-size="25" font-weight="700">warn</text>
+  <text x="104" y="304" fill="#cfe7d1" font-family="Cascadia Mono, Consolas, monospace" font-size="25">Mode: advisory</text>
+  <text x="104" y="356" fill="#cfe7d1" font-family="Cascadia Mono, Consolas, monospace" font-size="25">Findings: 1 (0 errors, 1 warnings, 0 info)</text>
+  <text x="104" y="440" fill="#dff4df" font-family="Cascadia Mono, Consolas, monospace" font-size="27" font-weight="700">Changed Files</text>
+  <text x="104" y="490" fill="#a9dfb2" font-family="Cascadia Mono, Consolas, monospace" font-size="24">- src/auth/session.ts</text>
+  <text x="104" y="574" fill="#dff4df" font-family="Cascadia Mono, Consolas, monospace" font-size="27" font-weight="700">Finding</text>
+  <text x="104" y="624" fill="#ffc56b" font-family="Cascadia Mono, Consolas, monospace" font-size="22" font-weight="700">WARNING SPEC_IMPACT_MISSING</text>
+  <text x="104" y="662" fill="#cfe7d1" font-family="Cascadia Mono, Consolas, monospace" font-size="21">Code changed without a related spec artifact change.</text>
+</svg>

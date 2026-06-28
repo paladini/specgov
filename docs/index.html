@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="SpecGov is a deterministic governance layer for keeping specs, ADRs, requirements, and code changes aligned in Git repositories."
+    />
+    <meta name="theme-color" content="#f7fbf4" />
+    <meta property="og:title" content="SpecGov" />
+    <meta
+      property="og:description"
+      content="Govern the specs your code is supposed to honor."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://paladini.github.io/specgov/" />
+    <title>SpecGov | Spec governance for Git repositories</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" aria-label="Site navigation">
+      <a class="brand" href="#top" aria-label="SpecGov home">
+        <span class="brand-mark" aria-hidden="true">SG</span>
+        <span>SpecGov</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#how-it-works">How it works</a>
+        <a href="#quickstart">Quick start</a>
+        <a href="#action">GitHub Action</a>
+        <a href="https://github.com/paladini/specgov">GitHub</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <img
+          class="hero-visual"
+          src="assets/specgov-report.svg"
+          alt="SpecGov pull request report showing an advisory warning for a code change without related spec impact."
+        />
+        <div class="hero-copy">
+          <p class="eyebrow">Deterministic spec governance for Git</p>
+          <h1 id="hero-title">
+            Govern the specs your code is supposed to honor.
+          </h1>
+          <p class="lede">
+            SpecGov keeps requirements, ADRs, product docs, and spec folders
+            aligned with pull requests without API keys, hosted services, or
+            model calls.
+          </p>
+          <div class="hero-actions" aria-label="Primary actions">
+            <a class="button primary" href="#quickstart">Start using SpecGov</a>
+            <a
+              class="button secondary"
+              href="https://github.com/paladini/specgov"
+            >
+              View source
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="signal-band" aria-label="SpecGov summary">
+        <div>
+          <strong>No new spec format</strong>
+          <span
+            >Bring your existing docs, ADRs, `.specs`, Kiro, or Spec Kit
+            files.</span
+          >
+        </div>
+        <div>
+          <strong>No secrets</strong>
+          <span>Runs locally and in CI with deterministic checks.</span>
+        </div>
+        <div>
+          <strong>No surprise blocking</strong>
+          <span>Start advisory, then opt into strict enforcement.</span>
+        </div>
+      </section>
+
+      <section class="section" id="why" aria-labelledby="why-title">
+        <div class="section-heading">
+          <p class="eyebrow">The drift problem</p>
+          <h2 id="why-title">Specs fail when Git can bypass them.</h2>
+        </div>
+        <div class="two-column">
+          <p>
+            Modern teams write requirements, ADRs, implementation plans, and
+            AI-facing specs, then review code in a separate workflow. SpecGov
+            connects those layers so reviewers can see when a pull request
+            changes implementation without updating the artifacts that explain
+            the intended behavior.
+          </p>
+          <p>
+            It is intentionally small: a YAML manifest, deterministic file
+            discovery, code-to-spec mappings, lifecycle metadata, Markdown
+            reports, JSON trace output, and a GitHub Action wrapper.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" id="how-it-works" aria-labelledby="how-title">
+        <div class="section-heading">
+          <p class="eyebrow">Mechanics</p>
+          <h2 id="how-title">
+            A manifest turns your repo into a governed map.
+          </h2>
+        </div>
+        <div class="flow-grid">
+          <article class="flow-step">
+            <span class="step-number">01</span>
+            <h3>Declare artifacts</h3>
+            <p>
+              Mark docs, ADRs, requirements, and spec folders as governed
+              artifacts.
+            </p>
+          </article>
+          <article class="flow-step">
+            <span class="step-number">02</span>
+            <h3>Map code paths</h3>
+            <p>
+              Connect implementation directories to the artifacts that must move
+              with them.
+            </p>
+          </article>
+          <article class="flow-step">
+            <span class="step-number">03</span>
+            <h3>Check pull requests</h3>
+            <p>
+              Report missing spec impact, unmapped code, lifecycle gaps, and
+              drift.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section
+        class="section split-section"
+        id="quickstart"
+        aria-labelledby="quickstart-title"
+      >
+        <div class="section-heading compact">
+          <p class="eyebrow">Quick start</p>
+          <h2 id="quickstart-title">
+            Install from source, then govern any repo.
+          </h2>
+          <p>
+            SpecGov is pre-release. Until the first npm package and version tag
+            are published, use the source build.
+          </p>
+        </div>
+        <div class="code-panel">
+          <div class="panel-title">Install</div>
+          <pre
+            class="copy-block"
+          ><code>git clone https://github.com/paladini/specgov.git
+cd specgov
+npm ci
+npm run build
+npm link</code></pre>
+          <div class="panel-title">Use in your repository</div>
+          <pre class="copy-block"><code>specgov init
+specgov scan
+specgov check-pr --changed-file src/auth/session.ts
+specgov trace --out .specgov.trace.json
+specgov drift</code></pre>
+        </div>
+      </section>
+
+      <section
+        class="section split-section"
+        id="manifest"
+        aria-labelledby="manifest-title"
+      >
+        <div class="section-heading compact">
+          <p class="eyebrow">Manifest</p>
+          <h2 id="manifest-title">Adopt with one `.specgov.yml` file.</h2>
+          <p>
+            Start with one high-value mapping. Expand gradually after the first
+            advisory findings make sense to reviewers.
+          </p>
+        </div>
+        <div class="code-panel">
+          <pre class="copy-block"><code>version: 1
+mode: advisory
+
+artifacts:
+  - path: "docs/**/*.md"
+    kind: documentation
+    owner: docs
+  - path: "adr/**/*.md"
+    kind: decision
+    owner: architecture
+
+mappings:
+  - code: "src/auth/**"
+    specs:
+      - "docs/auth/**"
+      - "adr/auth/**"
+
+rules:
+  require_spec_impact_for_code_changes: true
+  stale_after_days: 180</code></pre>
+        </div>
+      </section>
+
+      <section class="section" id="commands" aria-labelledby="commands-title">
+        <div class="section-heading">
+          <p class="eyebrow">Commands</p>
+          <h2 id="commands-title">
+            Five commands cover setup, review, and maintenance.
+          </h2>
+        </div>
+        <div class="command-list">
+          <div class="command-row">
+            <code>specgov init</code>
+            <span>Create a starter manifest.</span>
+          </div>
+          <div class="command-row">
+            <code>specgov scan</code>
+            <span>Discover governed artifacts and lifecycle findings.</span>
+          </div>
+          <div class="command-row">
+            <code>specgov check-pr</code>
+            <span>Compare changed files against code-to-spec mappings.</span>
+          </div>
+          <div class="command-row">
+            <code>specgov trace</code>
+            <span>Write machine-readable trace JSON.</span>
+          </div>
+          <div class="command-row">
+            <code>specgov drift</code>
+            <span>Report stale, empty, orphaned, or superseded artifacts.</span>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="section split-section"
+        id="action"
+        aria-labelledby="action-title"
+      >
+        <div class="section-heading compact">
+          <p class="eyebrow">GitHub Action</p>
+          <h2 id="action-title">Put governance in the pull request.</h2>
+          <p>
+            Advisory mode gives teams visibility without blocking adoption.
+            Strict mode turns warnings into a failing check.
+          </p>
+        </div>
+        <div class="code-panel">
+          <pre class="copy-block"><code>name: SpecGov
+
+on:
+  pull_request:
+
+jobs:
+  specgov:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: paladini/specgov@main
+        with:
+          mode: advisory
+          base-ref: ${{ github.event.pull_request.base.sha }}
+          head-ref: ${{ github.event.pull_request.head.sha }}</code></pre>
+        </div>
+      </section>
+
+      <section class="section" id="recipes" aria-labelledby="recipes-title">
+        <div class="section-heading">
+          <p class="eyebrow">Adoption paths</p>
+          <h2 id="recipes-title">Use your existing repository style.</h2>
+        </div>
+        <div class="recipe-grid">
+          <article class="recipe">
+            <h3>Docs-only</h3>
+            <p>Map `src/**` to `docs/**` for product or engineering docs.</p>
+            <a
+              href="https://github.com/paladini/specgov/tree/main/examples/docs-only"
+            >
+              View example
+            </a>
+          </article>
+          <article class="recipe">
+            <h3>ADR-heavy</h3>
+            <p>
+              Require code areas to move with matching ADR and product docs.
+            </p>
+            <a
+              href="https://github.com/paladini/specgov/tree/main/examples/adr-heavy"
+            >
+              View example
+            </a>
+          </article>
+          <article class="recipe">
+            <h3>Framework folders</h3>
+            <p>Govern `.specs`, `.kiro/specs`, or custom framework folders.</p>
+            <a
+              href="https://github.com/paladini/specgov/tree/main/examples/framework-folders"
+            >
+              View example
+            </a>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>SpecGov</strong>
+        <span>Framework-neutral governance for living specs.</span>
+      </div>
+      <a href="https://github.com/paladini/specgov">GitHub repository</a>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
