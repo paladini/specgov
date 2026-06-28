@@ -20,6 +20,7 @@
 - README quickstart.
 - GitHub Pages product site for global project adoption.
 - Contribution and security docs.
+- npm package distribution with tag-driven GitHub Releases.
 
 ## Later
 

@@ -101,27 +101,22 @@ declared mappings, and reports whether the review has enough spec context.
 
 ## Installation
 
-SpecGov is pre-release. Until the first npm package and version tag are
-published, install it from source:
+Install the CLI from npm:
 
 ```bash
-git clone https://github.com/paladini/specgov.git
-cd specgov
-npm ci
-npm run build
-npm link
+npm install -g specgov
 ```
 
-After `npm link`, the `specgov` command is available on your machine:
+You can also run it without a global install:
+
+```bash
+npx specgov --help
+```
+
+After installation, the `specgov` command is available on your machine:
 
 ```bash
 specgov --help
-```
-
-You can also run the local build directly:
-
-```bash
-node dist/cli.js --help
 ```
 
 ## Quick start
@@ -260,15 +255,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: paladini/specgov@main
+      - uses: paladini/specgov@v0.1.0
         with:
           mode: advisory
           base-ref: ${{ github.event.pull_request.base.sha }}
           head-ref: ${{ github.event.pull_request.head.sha }}
 ```
 
-Use `paladini/specgov@main` only while the project is pre-release. After a
-version tag exists, pin the Action to that tag.
+Pin the Action to a version tag for repeatable CI behavior.
 
 Use `mode: strict` when governance findings should block the pull request.
 
@@ -388,6 +382,8 @@ are usable today, but may still change before the first tagged release.
 Current project links:
 
 - Website: <https://paladini.github.io/specgov/>
+- npm: <https://www.npmjs.com/package/specgov>
 - Repository: <https://github.com/paladini/specgov>
 - Roadmap: [`.specs/project/ROADMAP.md`](.specs/project/ROADMAP.md)
+- Release process: [`RELEASING.md`](RELEASING.md)
 - Contribution guide: [`CONTRIBUTING.md`](CONTRIBUTING.md)

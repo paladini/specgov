@@ -294,23 +294,15 @@
       >
         <div class="section-heading compact">
           <p class="eyebrow">Quick start</p>
-          <h2 id="quickstart-title">
-            Install from source, then govern any repo.
-          </h2>
+          <h2 id="quickstart-title">Install from npm, then govern any repo.</h2>
           <p>
-            SpecGov is pre-release. Until the first npm package and version tag
-            are published, use the source build.
+            Use the CLI locally or in CI without adopting a new spec format.
           </p>
         </div>
         <div class="code-panel">
           <div class="panel-title">Install</div>
-          <pre
-            class="copy-block"
-          ><code>git clone https://github.com/paladini/specgov.git
-cd specgov
-npm ci
-npm run build
-npm link</code></pre>
+          <pre class="copy-block"><code>npm install -g specgov
+npx specgov --help</code></pre>
           <div class="panel-title">Use in your repository</div>
           <pre class="copy-block"><code>specgov init
 specgov scan
@@ -414,7 +406,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      - uses: paladini/specgov@main
+      - uses: paladini/specgov@v0.1.0
         with:
           mode: advisory
           base-ref: ${{ github.event.pull_request.base.sha }}

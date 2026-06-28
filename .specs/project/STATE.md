@@ -20,6 +20,9 @@
 - GitHub's official checkout and setup-node v5 tags exist and avoid the Node 20 runtime warning emitted by v4.
 - Public project education lives in the README and the static GitHub Pages site
   under `docs/`. The Pages workflow deploys the `docs` directory from `main`.
+- Public distribution is npm-first. Version tags drive `.github/workflows/release.yml`,
+  which validates the package, publishes npm when needed, and mirrors the
+  version as a GitHub Release.
 
 ## Deferred Ideas
 
