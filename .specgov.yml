@@ -2,7 +2,23 @@ version: 1
 mode: advisory
 
 artifacts:
+  - path: ".specgov.yml"
+    kind: configuration
+    owner: maintainers
+    status: active
   - path: "README.md"
+    kind: documentation
+    owner: maintainers
+    status: active
+  - path: "CHANGELOG.md"
+    kind: documentation
+    owner: maintainers
+    status: active
+  - path: "CONTRIBUTING.md"
+    kind: documentation
+    owner: maintainers
+    status: active
+  - path: "RELEASING.md"
     kind: documentation
     owner: maintainers
     status: active
@@ -32,6 +48,17 @@ mappings:
     specs:
       - ".specs/features/specgov-core/**"
       - "README.md"
+      - "RELEASING.md"
+  - code: "package.json"
+    specs:
+      - ".specs/project/**"
+      - "README.md"
+      - "RELEASING.md"
+  - code: "package-lock.json"
+    specs:
+      - ".specs/project/**"
+      - "README.md"
+      - "RELEASING.md"
 
 rules:
   require_spec_impact_for_code_changes: true
@@ -44,3 +71,4 @@ ignore:
   - "dist/**"
   - ".git/**"
   - "coverage/**"
+  - ".gitignore"

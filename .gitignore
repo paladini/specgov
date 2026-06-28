@@ -3,3 +3,4 @@ coverage/
 .specgov.trace.json
 .specgov.report.json
 *.log
+*.tgz

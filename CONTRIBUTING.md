@@ -10,7 +10,13 @@ npm test
 npm run build
 npm run lint
 npm run typecheck
+npm run format:check
 ```
+
+## Releases
+
+Releases are tag-driven. Follow [`RELEASING.md`](RELEASING.md) when publishing
+a new npm version or GitHub Release.
 
 ## Spec Governance
 

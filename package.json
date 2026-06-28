@@ -11,12 +11,16 @@
     "dist",
     "action.yml",
     "README.md",
+    "RELEASING.md",
+    "SECURITY.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "scripts": {
     "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
     "build": "npm run clean && tsc -p tsconfig.json && npm run build:action",
     "build:action": "ncc build src/action.ts -o dist/action -m --license licenses.txt",
+    "prepack": "npm run build",
     "test": "vitest run",
     "lint": "eslint .",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -32,6 +36,17 @@
   ],
   "author": "Fernando Paladini",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paladini/specgov.git"
+  },
+  "bugs": {
+    "url": "https://github.com/paladini/specgov/issues"
+  },
+  "homepage": "https://github.com/paladini/specgov#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=20"
   },
