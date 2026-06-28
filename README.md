@@ -3,49 +3,106 @@
 [![CI](https://github.com/paladini/specgov/actions/workflows/ci.yml/badge.svg)](https://github.com/paladini/specgov/actions/workflows/ci.yml)
 [![MIT License](https://img.shields.io/badge/license-MIT-0f766e.svg)](LICENSE)
 [![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-2f6f4e.svg)](https://paladini.github.io/specgov/)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D20-339933.svg)](package.json)
+[![Status](https://img.shields.io/badge/status-pre--release-f59e0b.svg)](#project-status)
 
-Govern the specs your code is supposed to honor.
+**Spec governance for Git repositories. Keep code, docs, ADRs, requirements,
+and spec folders aligned in every pull request.**
 
-SpecGov is a framework-agnostic governance layer for spec-driven development in
-Git repositories. It does not invent a new spec format. It lets you declare the
-requirements, ADRs, product docs, `.specs` folders, Kiro specs, Spec Kit plans,
-or custom artifacts that already define your system, then checks whether code
-changes keep those artifacts in the loop.
+SpecGov is a deterministic CLI and GitHub Action for teams that use specs as
+engineering contracts. It maps implementation paths to the source-of-truth
+artifacts that explain them, then reports when code changes bypass those
+artifacts.
 
-The core is deterministic by design: no API keys, no hosted service, no model
-calls, and no vendor lock-in. You can run it locally, in CI, or as a GitHub
-Action.
+It is not another spec framework. SpecGov works with the files you already
+have: product requirements, ADRs, design docs, `.specs` folders, Kiro specs,
+Spec Kit plans, and custom Markdown contracts.
+
+- **Framework agnostic:** Bring any spec convention and describe it in one
+  `.specgov.yml` manifest.
+- **PR native:** Run locally or as a GitHub Action during review.
+- **Advisory first:** Start with warnings, then move trusted areas to strict
+  enforcement.
+- **Audit friendly:** Emit Markdown for humans and JSON for automation.
+- **Private by default:** No hosted service, API key, model call, telemetry, or
+  repository upload.
+
+## Contents
+
+- [Why SpecGov exists](#why-specgov-exists)
+- [How it works](#how-it-works)
+- [Core capabilities](#core-capabilities)
+- [Installation](#installation)
+- [Quick start](#quick-start)
+- [Manifest](#manifest)
+- [Commands](#commands)
+- [GitHub Action](#github-action)
+- [Adoption recipes](#adoption-recipes)
+- [Report example](#report-example)
+- [Enterprise-friendly defaults](#enterprise-friendly-defaults)
+- [How SpecGov differs from SpecTrace](#how-specgov-differs-from-spectrace)
+- [Development](#development)
+- [Security and privacy](#security-and-privacy)
+- [Project status](#project-status)
 
 ## Why SpecGov exists
 
-Spec-driven development works until Git quietly merges implementation changes
-that bypass the spec layer. Over time, reviewers stop trusting requirements,
-ADRs become archaeology, and AI-assisted changes become harder to audit.
+Spec-driven development breaks down when Git accepts code-only pull requests
+for behavior that was supposed to be governed by requirements, ADRs, product
+docs, or design plans. The result is familiar:
 
-SpecGov gives teams a small, explicit contract:
+- requirements become stale after the implementation moves on;
+- ADRs lose authority because reviewers cannot see when they were bypassed;
+- AI-assisted changes become hard to audit after the conversation is gone;
+- teams adopt multiple spec formats, then lose one shared governance layer;
+- compliance and platform teams need traceability without a heavyweight tool.
 
-- Which files are governed artifacts?
-- Which code paths depend on which artifacts?
-- Did this pull request update the right spec, doc, ADR, or plan?
-- Which artifacts are stale, orphaned, superseded, or missing ownership?
-- Can a human or future AI auditor reconstruct the trace later?
+SpecGov gives repositories a small contract:
 
-## What SpecGov checks
+1. Declare the artifacts that define expected behavior.
+2. Map code paths to the artifacts that must move with them.
+3. Check pull requests for missing spec impact.
+4. Generate trace and drift reports that humans and automation can inspect.
 
-| Capability         | What it does                                                     |
-| ------------------ | ---------------------------------------------------------------- |
-| Artifact discovery | Finds governed docs, ADRs, specs, and requirements from globs.   |
-| Lifecycle metadata | Reads optional YAML frontmatter such as `status` and `owner`.    |
-| PR impact checks   | Flags code changes that do not touch mapped spec artifacts.      |
-| Unmapped code      | Finds changed files outside your declared code-to-spec map.      |
-| Trace index        | Emits JSON linking artifacts, mappings, and matched files.       |
-| Drift report       | Reports stale, empty, orphaned, or superseded artifacts.         |
-| GitHub Action      | Runs the same deterministic check inside pull request workflows. |
+## How it works
+
+```mermaid
+flowchart LR
+    artifacts["Docs, ADRs, specs, and plans"]
+    manifest[".specgov.yml"]
+    changes["Changed code paths"]
+    specgov["SpecGov CLI or Action"]
+    report["Markdown or JSON report"]
+    review["Reviewers and CI"]
+
+    artifacts --> specgov
+    manifest --> specgov
+    changes --> specgov
+    specgov --> report
+    report --> review
+```
+
+SpecGov does not parse your business logic or invent a new workflow. It reads
+your manifest, discovers governed artifacts, compares changed files with your
+declared mappings, and reports whether the review has enough spec context.
+
+## Core capabilities
+
+| Capability              | What it gives you                                            |
+| ----------------------- | ------------------------------------------------------------ |
+| Artifact discovery      | Finds governed docs, ADRs, specs, and requirements by glob.  |
+| Lifecycle metadata      | Reads optional `status`, `owner`, and verification metadata. |
+| PR impact checks        | Flags code changes that skip mapped spec artifacts.          |
+| Unmapped code detection | Finds changed files outside your declared governance map.    |
+| Trace index             | Emits JSON linking artifacts, mappings, and matched files.   |
+| Drift report            | Reports stale, empty, orphaned, or superseded artifacts.     |
+| GitHub Action           | Runs the same deterministic checks inside pull requests.     |
+| Advisory/strict modes   | Lets teams observe first, then block trusted paths later.    |
 
 ## Installation
 
-SpecGov is currently pre-release. Until the first npm package and version tag
-are published, install it from source:
+SpecGov is pre-release. Until the first npm package and version tag are
+published, install it from source:
 
 ```bash
 git clone https://github.com/paladini/specgov.git
@@ -79,13 +136,13 @@ specgov trace --out .specgov.trace.json
 specgov drift
 ```
 
-`specgov init` creates `.specgov.yml`. Start in `advisory` mode so teams can
-see findings without blocking merges, then switch selected repositories or
-paths to `strict` when the mapping is trusted.
+Start in `advisory` mode so contributors can see findings without blocking
+merges. Move selected repositories or paths to `strict` after the mapping has
+earned trust in real pull requests.
 
 ## Manifest
 
-SpecGov uses one YAML manifest:
+SpecGov is configured with one YAML file:
 
 ```yaml
 version: 1
@@ -124,19 +181,19 @@ ignore:
 
 ### Governed artifacts
 
-Each entry in `artifacts` tells SpecGov which files belong to your spec layer.
-Use any folder convention you already have:
+Each `artifacts` entry tells SpecGov which files belong to your spec layer. Use
+the folder convention your team already has:
 
 - `docs/**/*.md` for product or engineering docs.
 - `adr/**/*.md` for architectural decisions.
 - `.specs/**/*.md` for TLC Spec Driven or custom specs.
 - `.kiro/specs/**/*.md` for Kiro-style spec folders.
-- `specs/**/*.md` for Spec Kit or other repository-local plans.
+- `specs/**/*.md` for Spec Kit or repository-local plans.
 
 ### Code-to-spec mappings
 
-Each entry in `mappings` connects implementation paths to the artifacts that
-must move with them. If `src/auth/**` changes and no mapped artifact changes,
+Each `mappings` entry connects implementation paths to the artifacts that must
+move with them. If `src/auth/**` changes and no mapped artifact changes,
 SpecGov reports `SPEC_IMPACT_MISSING`.
 
 When `require_spec_impact_for_code_changes` is enabled, SpecGov also reports
@@ -154,7 +211,7 @@ owner: platform
 last_verified: 2026-06-27
 ---
 
-# Authentication Session Contract
+# Authentication session contract
 ```
 
 Supported statuses are `draft`, `active`, `superseded`, `deprecated`, and
@@ -171,8 +228,8 @@ where the current source of truth moved.
 | `specgov trace`    | Generate a machine-readable trace index.             | Automation and audits. |
 | `specgov drift`    | Report stale, empty, orphaned, or superseded specs.  | Maintenance reviews.   |
 
-All report commands default to Markdown output. Use `--format json` for
-automation:
+All report commands default to Markdown output. Use `--format json` when
+another tool needs to consume the result:
 
 ```bash
 specgov scan --format json
@@ -181,13 +238,13 @@ specgov check-pr --format json --changed-file src/payments/checkout.ts
 
 Exit codes:
 
-- `0`: pass, or warning in `advisory` mode.
+- `0`: pass, or warnings in `advisory` mode.
 - `1`: governance failure in `strict` mode.
 - `2`: runtime or configuration error.
 
 ## GitHub Action
 
-Add SpecGov to pull requests with a workflow like this:
+Run SpecGov on pull requests:
 
 ```yaml
 name: SpecGov
@@ -235,7 +292,7 @@ Use `mode: strict` when governance findings should block the pull request.
 
 ## Adoption recipes
 
-The `examples/` folder includes starter manifests:
+The `examples/` folder includes starter manifests for common repository shapes:
 
 | Repository style  | Example                                                                              |
 | ----------------- | ------------------------------------------------------------------------------------ |
@@ -275,6 +332,20 @@ Findings: 1 (0 errors, 1 warnings, 0 info)
     this mapping is ready to enforce.
 ```
 
+## Enterprise-friendly defaults
+
+SpecGov is small, but its defaults are designed for serious engineering teams:
+
+- **No data leaves your runner.** SpecGov reads local files and git metadata.
+- **No vendor workflow lock-in.** The manifest points to any docs, ADRs, or
+  spec folders your organization already uses.
+- **No all-at-once migration.** Advisory mode lets teams learn before
+  enforcement.
+- **Machine-readable outputs.** JSON reports can feed dashboards, policy jobs,
+  or release evidence.
+- **Review-first governance.** Findings appear where engineers already make
+  decisions: pull requests and local checks.
+
 ## How SpecGov differs from SpecTrace
 
 SpecTrace for AI Coding verifies whether a specific AI-assisted change
@@ -305,10 +376,16 @@ request.
 ## Security and privacy
 
 SpecGov runs locally or in your CI runner. Version 0.1 does not call external
-services, require API keys, or send repository contents to a model. See
-[`SECURITY.md`](SECURITY.md) for vulnerability reporting.
+services, require API keys, or send repository contents to a model.
 
-## Project links
+See [`SECURITY.md`](SECURITY.md) for vulnerability reporting.
+
+## Project status
+
+SpecGov is in pre-release development. The CLI, report shape, and Action inputs
+are usable today, but may still change before the first tagged release.
+
+Current project links:
 
 - Website: <https://paladini.github.io/specgov/>
 - Repository: <https://github.com/paladini/specgov>
