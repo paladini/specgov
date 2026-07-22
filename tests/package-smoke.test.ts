@@ -36,6 +36,20 @@ describe("package and CLI smoke", () => {
     expect(stdout).toContain("graph");
   });
 
+  it("reports the canonical package version", async () => {
+    const packageJson = JSON.parse(
+      await fs.readFile(path.join(root, "package.json"), "utf8"),
+    ) as { version: string };
+    const { stdout } = await exec(
+      process.execPath,
+      ["dist/cli.js", "--version"],
+      {
+        cwd: root,
+      },
+    );
+    expect(stdout.trim()).toBe(packageJson.version);
+  });
+
   it("includes required release files in the npm tarball manifest", async () => {
     const npmCli = process.env.npm_execpath;
     if (!npmCli) throw new Error("npm_execpath is required for package smoke");
