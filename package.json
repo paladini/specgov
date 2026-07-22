@@ -1,7 +1,7 @@
 {
   "name": "specgov",
-  "version": "0.1.0",
-  "description": "Spec governance layer for Git repositories.",
+  "version": "1.0.0-rc.1",
+  "description": "Git-native governance for artifacts created and consumed during AI-assisted software development.",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
@@ -32,7 +32,10 @@
     "git",
     "requirements",
     "traceability",
-    "github-action"
+    "github-action",
+    "ai-agents",
+    "spec-driven-development",
+    "artifact-governance"
   ],
   "author": "Fernando Paladini",
   "license": "MIT",
@@ -43,7 +46,7 @@
   "bugs": {
     "url": "https://github.com/paladini/specgov/issues"
   },
-  "homepage": "https://github.com/paladini/specgov#readme",
+  "homepage": "https://paladini.io/specgov/",
   "publishConfig": {
     "access": "public"
   },
@@ -55,7 +58,8 @@
     "commander": "^15.0.0",
     "fast-glob": "^3.3.3",
     "picomatch": "^4.0.4",
-    "yaml": "^2.9.0"
+    "yaml": "^2.9.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -67,5 +71,6 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.62.0",
     "vitest": "^4.1.9"
-  }
+  },
+  "types": "./dist/index.d.ts"
 }

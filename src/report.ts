@@ -1,125 +1,75 @@
-import type {
-  EnforcementMode,
-  Finding,
-  ReportStatus,
-  SpecGovReport,
-} from "./types.js";
-
-export function evaluateStatus(
-  findings: Finding[],
-  mode: EnforcementMode,
-): ReportStatus {
-  if (findings.some((finding) => finding.severity === "error")) {
-    return "fail";
-  }
-  if (findings.some((finding) => finding.severity === "warning")) {
-    return mode === "strict" ? "fail" : "warn";
-  }
-  return "pass";
-}
-
-export function makeReport(
-  input: Omit<SpecGovReport, "status" | "summary">,
-): SpecGovReport {
-  const status = evaluateStatus(input.findings, input.mode);
-  return {
-    ...input,
-    status,
-    summary: {
-      findings: input.findings.length,
-      errors: input.findings.filter((finding) => finding.severity === "error")
-        .length,
-      warnings: input.findings.filter(
-        (finding) => finding.severity === "warning",
-      ).length,
-      infos: input.findings.filter((finding) => finding.severity === "info")
-        .length,
-    },
-  };
-}
-
-export function exitCodeForReport(report: SpecGovReport): number {
-  if (report.status === "error") {
-    return 2;
-  }
-  if (report.status === "fail") {
-    return 1;
-  }
-  return 0;
-}
-
+import type { ArtifactGraph, OutputFormat, SpecGovReport } from "./types.js";
 export function renderReport(
   report: SpecGovReport,
-  format: "json" | "markdown" = "markdown",
+  format: OutputFormat = "terminal",
 ): string {
-  if (format === "json") {
-    return `${JSON.stringify(report, null, 2)}\n`;
-  }
-  return renderMarkdownReport(report);
+  if (format === "json") return `${JSON.stringify(report, null, 2)}\n`;
+  return format === "markdown" ? markdown(report) : terminal(report);
 }
-
-export function renderMarkdownReport(report: SpecGovReport): string {
+export function renderGraph(
+  graph: ArtifactGraph,
+  format: "json" | "markdown" = "json",
+): string {
+  if (format === "json") return `${JSON.stringify(graph, null, 2)}\n`;
   const lines = [
-    `# SpecGov ${report.command} report`,
+    "# SpecGov artifact graph",
     "",
-    `Status: **${report.status}**`,
-    `Mode: \`${report.mode}\``,
-    `Findings: ${report.summary.findings} (${report.summary.errors} errors, ${report.summary.warnings} warnings, ${report.summary.infos} info)`,
+    `Frameworks: ${graph.detectedFrameworks.map((f) => f.id).join(", ") || "none"}`,
+    `Change sets: ${graph.changeSets.length}`,
+    `Artifacts: ${graph.artifacts.length}`,
+    "",
+    "## Artifacts",
     "",
   ];
-
-  if (report.changedFiles?.length) {
-    lines.push("## Changed Files", "");
-    for (const file of report.changedFiles) {
-      lines.push(`- \`${file}\``);
-    }
-    lines.push("");
-  }
-
-  if (report.artifacts) {
-    lines.push("## Governed Artifacts", "");
-    if (report.artifacts.length === 0) {
-      lines.push("No governed artifacts were discovered.", "");
-    } else {
-      for (const artifact of report.artifacts) {
-        const status = artifact.status ? `, status: ${artifact.status}` : "";
-        const owner = artifact.owner ? `, owner: ${artifact.owner}` : "";
-        lines.push(
-          `- \`${artifact.path}\` (${artifact.kind}${status}${owner})`,
-        );
-      }
-      lines.push("");
-    }
-  }
-
-  lines.push("## Findings", "");
-  if (report.findings.length === 0) {
-    lines.push("No findings.", "");
-  } else {
-    for (const finding of report.findings) {
-      lines.push(
-        `- **${finding.severity.toUpperCase()} ${finding.code}**: ${finding.message}`,
-      );
-      if (finding.file) {
-        lines.push(`  - File: \`${finding.file}\``);
-      }
-      if (finding.relatedFiles?.length) {
-        lines.push(
-          `  - Related: ${finding.relatedFiles.map((file) => `\`${file}\``).join(", ")}`,
-        );
-      }
-      if (finding.suggestion) {
-        lines.push(`  - Suggestion: ${finding.suggestion}`);
-      }
-    }
-    lines.push("");
-  }
-
-  if (report.trace) {
-    lines.push("## Trace Summary", "");
-    lines.push(`Artifacts: ${report.trace.artifacts.length}`);
-    lines.push(`Mappings: ${report.trace.mappings.length}`, "");
-  }
-
+  for (const a of graph.artifacts)
+    lines.push(`- \`${a.id}\` — \`${a.path}\` (${a.role}, ${a.framework})`);
+  lines.push("", "## Relations", "");
+  for (const e of graph.relations)
+    lines.push(`- \`${e.from}\` —${e.type}→ \`${e.to}\``);
+  return `${lines.join("\n")}\n`;
+}
+export function exitCodeForReport(report: SpecGovReport): number {
+  return report.status === "fail" ? 1 : 0;
+}
+function terminal(r: SpecGovReport): string {
+  const lines = [
+    `SpecGov ${r.status.toUpperCase()} (${r.mode})`,
+    `Frameworks: ${r.graph.detectedFrameworks.map((f) => f.id).join(", ") || "none"}`,
+    `Change sets: ${r.summary.changeSets} | Artifacts: ${r.summary.artifacts} | Findings: ${r.summary.findings}`,
+  ];
+  for (const f of r.findings.slice(0, 10))
+    lines.push(
+      `${f.severity.toUpperCase()} ${f.code}: ${f.message}\n  Next: ${f.remediation}`,
+    );
+  if (r.findings.length > 10)
+    lines.push(`...and ${r.findings.length - 10} more findings.`);
+  return `${lines.join("\n")}\n`;
+}
+function markdown(r: SpecGovReport): string {
+  const lines = [
+    "# SpecGov check",
+    "",
+    `**Status:** ${r.status}  `,
+    `**Mode:** ${r.mode}  `,
+    `**Frameworks:** ${r.graph.detectedFrameworks.map((f) => f.id).join(", ") || "none"}  `,
+    `**Change sets:** ${r.summary.changeSets}  `,
+    `**Artifacts:** ${r.summary.artifacts}  `,
+    `**Findings:** ${r.summary.findings}`,
+    "",
+    "## Findings",
+    "",
+  ];
+  if (!r.findings.length) lines.push("No findings.");
+  for (const f of r.findings)
+    lines.push(
+      `### ${f.severity.toUpperCase()} ${f.code}`,
+      "",
+      f.message,
+      "",
+      `Evidence: ${f.evidence.join("; ") || "n/a"}`,
+      "",
+      `Next: ${f.remediation}`,
+      "",
+    );
   return `${lines.join("\n")}\n`;
 }

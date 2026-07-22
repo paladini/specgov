@@ -1,5 +1,4 @@
-export * from "./artifacts.js";
-export * from "./checks.js";
-export * from "./manifest.js";
-export * from "./report.js";
-export * from "./types.js";
+export { analyzeRepository } from "./analyze.js";
+export { discoverArtifactGraph } from "./graph.js";
+export { loadSpecGovConfig } from "./config.js";
+export { renderReport } from "./report.js";

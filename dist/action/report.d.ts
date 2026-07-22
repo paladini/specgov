@@ -1,6 +1,4 @@
-import type { EnforcementMode, Finding, ReportStatus, SpecGovReport } from "./types.js";
-export declare function evaluateStatus(findings: Finding[], mode: EnforcementMode): ReportStatus;
-export declare function makeReport(input: Omit<SpecGovReport, "status" | "summary">): SpecGovReport;
+import type { ArtifactGraph, OutputFormat, SpecGovReport } from "./types.js";
+export declare function renderReport(report: SpecGovReport, format?: OutputFormat): string;
+export declare function renderGraph(graph: ArtifactGraph, format?: "json" | "markdown"): string;
 export declare function exitCodeForReport(report: SpecGovReport): number;
-export declare function renderReport(report: SpecGovReport, format?: "json" | "markdown"): string;
-export declare function renderMarkdownReport(report: SpecGovReport): string;

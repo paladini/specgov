@@ -1,45 +1,31 @@
 # SpecGov
 
-**Vision:** SpecGov is a universal governance layer that keeps spec artifacts aligned with code changes in Git repositories without imposing a spec framework.
-**For:** Open-source maintainers, platform engineers, AI-assisted development teams, and compliance-minded engineering organizations.
-**Solves:** Specs, ADRs, requirements, and implementation plans become stale because Git can merge code changes without requiring explicit spec impact.
+**Vision:** SpecGov is the Git-native governance layer for artifacts created and consumed during AI-assisted software development.
+**For:** Developers, AI-assisted engineering teams, platform engineers, and OSS maintainers.
+**Solves:** Intent, specifications, plans, tasks, implementation, and verification evidence drift apart after coding agents act on them.
 
 ## Goals
 
-- Provide a deterministic CLI that validates spec governance in any Git repository.
-- Ship a GitHub Action that teams can adopt in advisory mode and later tighten to strict mode.
-- Preserve framework neutrality across docs, ADRs, `.specs`, `.kiro`, Spec-Kit, TLC, and custom formats.
+- Produce a useful, deterministic artifact-governance result with `npx specgov check` and no configuration.
+- Autodetect Spec Kit, OpenSpec, Kiro, and Generic/TLC workflows and expose one stable graph.
+- Enforce explicit code-to-artifact governance in local development and pull requests.
+- Keep all deterministic analysis local and network-free.
 
 ## Tech Stack
 
-**Core:**
-
-- Framework: Node.js CLI
-- Language: TypeScript
-- Database: None
-
-**Key dependencies:** commander, yaml, fast-glob, picomatch, Vitest.
+- Node.js 20+, TypeScript ESM, Commander, YAML, Zod, fast-glob, picomatch.
+- Vitest, ESLint, Prettier, GitHub Actions, and a Node 24 ncc Action bundle.
+- No database or hosted service.
 
 ## Scope
 
-**v1 includes:**
+**v1 includes:** framework adapters, normalized artifact graph, deterministic policies, optional executable semantic auditor, CLI, library API, GitHub Action, examples, docs, and public release assets.
 
-- YAML manifest parsing and validation.
-- Artifact discovery and lifecycle checks.
-- Code-to-spec impact checks for PR diffs.
-- Trace index and drift reports.
-- GitHub Action wrapper.
-
-**Explicitly out of scope:**
-
-- Required LLM audit.
-- Enterprise compliance exports.
-- GitLab and Bitbucket packaged integrations.
-- Package registry publication.
-- A new spec authoring framework.
+**Explicitly out of scope:** spec authoring, code generation, inferred authorship, mandatory LLM calls, hosted storage, automatic v0.1 migration, and cryptographic provenance.
 
 ## Constraints
 
-- Keep the core deterministic and runnable without secrets.
-- Favor advisory adoption by default.
-- Keep implementation small enough for a reviewer to understand quickly.
+- Preserve repository, npm package, URLs, license, author, Git history, and unrelated user changes.
+- Treat producer metadata as declarations only.
+- Reject paths outside the repository and ignore symlinks by default.
+- Release only after package, Action, docs, and external smoke tests pass.

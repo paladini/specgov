@@ -1,32 +1,20 @@
 # Contributing
 
-Thanks for considering a contribution to SpecGov.
+SpecGov welcomes focused issues and pull requests for AI-development artifact governance.
 
-## Development
+## Development gate
 
 ```bash
-npm install
+npm ci
 npm test
 npm run build
 npm run lint
 npm run typecheck
 npm run format:check
+npm audit --omit=dev
+npm pack --dry-run
 ```
 
-## Releases
+Behavior changes must update tests, the relevant `.specs/features/` artifacts, public types, examples, and documentation together. New framework conventions require an official primary source, a verification date, and canonical fixtures. Policies must consume the normalized graph rather than framework-specific paths.
 
-Releases are tag-driven. Follow [`RELEASING.md`](RELEASING.md) when publishing
-a new npm version or GitHub Release.
-
-## Spec Governance
-
-SpecGov uses TLC Spec Driven internally, but the product itself is framework
-agnostic. Changes that affect behavior should update the relevant files under
-`.specs/` and keep the README examples in sync.
-
-## Pull Requests
-
-- Keep changes focused.
-- Include tests with behavior changes.
-- Run the full local gate before opening a PR.
-- Mention whether the PR changes public CLI behavior, report shape, or Action inputs.
+Pull requests should explain public CLI, JSON schema, Action, security, and migration impact. Never include prompts, conversations, API keys, tokens, or inferred producer metadata.

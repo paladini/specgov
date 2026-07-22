@@ -45,6 +45,7 @@ jobs:
             echo "name=$name"
             echo "version=$version"
             echo "tag=$tag"
+            if [[ "$version" == *-* ]]; then echo "dist_tag=next"; echo "prerelease=true"; else echo "dist_tag=latest"; echo "prerelease=false"; fi
           } >> "$GITHUB_OUTPUT"
 
       - run: npm ci
@@ -53,6 +54,8 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run format:check
+      - run: npm audit --omit=dev
+      - run: npm pack --dry-run
 
       - name: Create release tarball
         id: pack
@@ -85,7 +88,7 @@ jobs:
 
       - name: Publish to npm
         if: steps.npm.outputs.published == 'false'
-        run: npm publish "${{ steps.pack.outputs.tarball }}" --access public --provenance
+        run: npm publish "${{ steps.pack.outputs.tarball }}" --access public --provenance --tag "${{ steps.package.outputs.dist_tag }}"
 
       - name: Create or update GitHub release
         env:
@@ -95,11 +98,14 @@ jobs:
           tag="${{ steps.package.outputs.tag }}"
           tarball="${{ steps.pack.outputs.tarball }}"
 
-          if gh release view "$tag" >/dev/null 2>&1; then
-            gh release upload "$tag" "$tarball" --clobber
-          else
-            gh release create "$tag" "$tarball" \
-              --verify-tag \
-              --title "SpecGov $tag" \
-              --generate-notes
-          fi
+          if gh release view "$tag" >/dev/null 2>&1; then echo "Release $tag already exists; refusing to mutate it." >&2; exit 1; fi
+          prerelease=()
+          if [ "${{ steps.package.outputs.prerelease }}" = "true" ]; then prerelease+=(--prerelease); fi
+          gh release create "$tag" "$tarball" --verify-tag --title "SpecGov $tag" --generate-notes "${prerelease[@]}"
+
+      - name: Move verified major Action tag
+        if: steps.package.outputs.prerelease == 'false' && steps.package.outputs.version == '1.0.0'
+        shell: bash
+        run: |
+          git tag -f v1 "$GITHUB_SHA"
+          git push origin refs/tags/v1 --force

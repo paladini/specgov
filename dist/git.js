@@ -3,7 +3,7 @@ import { promisify } from "node:util";
 import { normalizePath } from "./paths.js";
 const execFileAsync = promisify(execFile);
 export async function getChangedFiles(options) {
-    if (options.explicitFiles && options.explicitFiles.length > 0) {
+    if (options.explicitFiles !== undefined) {
         return uniqueNormalized(options.explicitFiles);
     }
     if (options.baseRef && options.headRef) {

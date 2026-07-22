@@ -2,31 +2,24 @@
 
 ## Decisions
 
-- Use TypeScript for the CLI and GitHub Action.
-- Use YAML for the manifest.
-- Default to advisory mode with strict mode opt-in.
-- Keep the v1 core deterministic and framework-agnostic.
-- Use TLC Spec Driven only as this repository's internal implementation process.
+- v1 is an intentional clean break from the generic v0.1 manifest, commands, API, and report format.
+- The product governs AI-assisted development artifacts without inferring whether AI created them.
+- Built-in adapters are isolated from the graph and policy engine.
+- Explicit domains are required for strict code-to-artifact governance.
+- Deterministic analysis is the product core; semantic analysis is an opt-in executable JSON protocol.
+- Producer metadata is declared, never verified or inferred.
+- The public CLI has only `init`, `check`, and `graph` commands.
 
 ## Blockers
 
-- None.
+- Stable public release and article publication depend on authenticated external services and successful RC validation.
 
 ## Lessons Learned
 
-- SpecGov must stay distinct from SpecTrace for AI Coding: SpecTrace checks evidence for a specific implementation change; SpecGov governs living spec artifacts across Git workflows.
-- The v1 smoke test should include both advisory warnings and strict failures so users can trust the opt-in enforcement mode before adopting it.
-- GitHub Actions now warns that Node 20 actions are forced to Node 24, so SpecGov's own Action and CI target Node 24 while the CLI package can still support Node 20+.
-- GitHub's official checkout and setup-node v5 tags exist and avoid the Node 20 runtime warning emitted by v4.
-- Public project education lives in the README and the static GitHub Pages site
-  under `docs/`. The Pages workflow deploys the `docs` directory from `main`.
-- Public distribution is npm-first. Version tags drive `.github/workflows/release.yml`,
-  which validates the package, publishes npm when needed, and mirrors the
-  version as a GitHub Release.
+- Generic documentation governance obscured the product's strongest use case: durable governance after agent conversations disappear.
+- A changed but unrelated spec cannot satisfy governance for an explicitly mapped code domain.
+- Framework conventions must remain adapter-specific and sourced from official documentation.
 
 ## Deferred Ideas
 
-- Optional LLM semantic drift auditor.
-- SARIF output.
-- ReqIF or OSLC export.
-- GitLab and Bitbucket packaged integrations.
+- Cryptographic provenance, hosted services, SARIF, and provider-specific semantic integrations.

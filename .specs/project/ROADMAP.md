@@ -1,30 +1,30 @@
 # SpecGov Roadmap
 
-## M1: Deterministic Core
+**Current Milestone:** v1.0 AI artifact governance
+**Status:** In Progress
 
-- Manifest parser and schema validation.
-- Artifact discovery.
-- Lifecycle validation.
-- PR impact checks.
-- Trace and drift reports.
+## M1: Governed artifact graph
 
-## M2: GitHub Action
+- Framework autodetection and adapters - IN PROGRESS
+- Normalized graph and declared metadata - IN PROGRESS
+- New `specgov/v1` configuration - IN PROGRESS
 
-- Action wrapper around `check-pr`.
-- Markdown job summary.
-- JSON output for downstream automation.
+## M2: Policy and interfaces
 
-## M3: Adoption Polish
+- Deterministic state-aware policy engine - PLANNED
+- `init`, `check`, and `graph` CLI plus library API - PLANNED
+- Optional semantic auditor protocol - PLANNED
+- Node 24 GitHub Action - PLANNED
 
-- Example manifests for docs-only, ADR-heavy, and spec-framework repos.
-- README quickstart.
-- GitHub Pages product site for global project adoption.
-- Contribution and security docs.
-- npm package distribution with tag-driven GitHub Releases.
+## M3: Release readiness
 
-## Later
+- Canonical fixtures, integration, e2e, and performance tests - PLANNED
+- AI-first README, Pages, examples, and references - PLANNED
+- `1.0.0-rc.1` external validation - PLANNED
+- Stable `v1.0.0`, npm `latest`, Action `v1`, and launch materials - PLANNED
 
-- Optional AI auditor for semantic drift.
-- SARIF output.
-- ReqIF or OSLC export.
-- GitLab and Bitbucket packaged integrations.
+## Future Considerations
+
+- Signed provenance and attestations.
+- Hosted visualization and organization policy management.
+- Provider-specific semantic auditor packages outside the core.
