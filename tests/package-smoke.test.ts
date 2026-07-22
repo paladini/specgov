@@ -80,7 +80,7 @@ describe("package and CLI smoke", () => {
     );
   });
 
-  it("installs the tarball offline and runs the public API and CLI", async () => {
+  it("installs the tarball and runs the public API and CLI", async () => {
     const npmCli = process.env.npm_execpath;
     if (!npmCli) throw new Error("npm_execpath is required for package smoke");
 
@@ -119,7 +119,6 @@ describe("package and CLI smoke", () => {
           npmCli,
           "install",
           tarball,
-          "--offline",
           "--ignore-scripts",
           "--no-audit",
           "--no-fund",

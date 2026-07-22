@@ -116,10 +116,11 @@ describe("semantic auditor failure isolation", () => {
     };
 
     const report = await analyzeRepository({ cwd, config, changedFiles: [] });
+    const canonicalCwd = await fs.realpath(cwd);
 
     expect(report.findings).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ code: "AUDITOR_CWD", message: cwd }),
+        expect.objectContaining({ code: "AUDITOR_CWD", message: canonicalCwd }),
       ]),
     );
   });

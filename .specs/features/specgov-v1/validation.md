@@ -7,7 +7,7 @@
 - 54 Vitest tests passed locally; the CI matrix will repeat them across Linux, Windows, and macOS on Node.js 20, 22, and 24.
 - TypeScript strict typecheck, ESLint, Prettier, and ncc build passed.
 - Full `npm audit` reported 0 vulnerabilities.
-- The test suite packs the exact `specgov-1.0.0-rc.3.tgz`, installs it offline into a clean temporary path containing spaces, imports the public API, and executes `init`, `check`, and `graph`.
+- The test suite packs the exact `specgov-1.0.0-rc.3.tgz`, installs it into a clean temporary path containing spaces, imports the public API, and executes `init`, `check`, and `graph`.
 - A deterministic corpus of 500 change sets and 1,500 artifacts completes within the 15-second local budget and produces byte-identical graphs across runs.
 - PR #6 passed the complete CI matrix, Dependency Review, and CodeQL before merge; `main` is now protected by those gates.
 - Dogfood `specgov check` detected Generic/TLC and returned pass.
