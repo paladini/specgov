@@ -1,4 +1,5 @@
 import fg from "fast-glob";
+import fs from "node:fs/promises";
 import path from "node:path";
 import type {
   ArtifactContribution,
@@ -14,13 +15,34 @@ async function files(
   context: RepositoryContext,
   patterns: string[],
 ): Promise<string[]> {
-  return fg(patterns, {
+  const matched = await fg(patterns, {
     cwd: context.cwd,
     onlyFiles: true,
     dot: true,
     followSymbolicLinks: context.allowSymlinks,
     ignore: context.ignore,
-  }).then((x) => x.map(posix).sort());
+  });
+  const safe = context.allowSymlinks
+    ? matched
+    : (
+        await Promise.all(
+          matched.map(async (file) =>
+            (await hasSymlinkComponent(context.cwd, file)) ? undefined : file,
+          ),
+        )
+      ).filter((file): file is string => file !== undefined);
+  return safe.map(posix).sort();
+}
+async function hasSymlinkComponent(
+  cwd: string,
+  file: string,
+): Promise<boolean> {
+  const parts = file.split(/[\\/]/);
+  for (let index = 1; index <= parts.length; index++) {
+    const stat = await fs.lstat(path.join(cwd, ...parts.slice(0, index)));
+    if (stat.isSymbolicLink()) return true;
+  }
+  return false;
 }
 function posix(value: string): string {
   return value.replaceAll(path.sep, "/").replaceAll("\\", "/");
@@ -159,13 +181,17 @@ export const genericAdapter: FrameworkAdapter = {
   id: "generic",
   async detect(context) {
     const roots = context.generic?.roots ?? [".specs/features"];
+    const patterns = context.generic?.roles.length
+      ? context.generic.roles.flatMap((role) => role.patterns)
+      : ["spec.md", "design.md", "tasks.md"];
     const matched = await files(
       context,
-      roots.flatMap((r) => [
-        `${r}/*/spec.md`,
-        `${r}/*/design.md`,
-        `${r}/*/tasks.md`,
-      ]),
+      roots.flatMap((root) =>
+        patterns.flatMap((pattern) => [
+          `${root}/*/${pattern}`,
+          `${root}/${pattern}`,
+        ]),
+      ),
     );
     return {
       detected: matched.length > 0,
