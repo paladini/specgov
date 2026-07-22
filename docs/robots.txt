@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://paladini.github.io/specgov/sitemap.xml
+Sitemap: https://paladini.io/specgov/sitemap.xml

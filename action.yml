@@ -1,36 +1,43 @@
 name: SpecGov
-description: Validate spec governance impact for Git pull requests.
+description: Govern AI-assisted development artifacts in Git pull requests.
 author: Fernando Paladini
-
 inputs:
   config:
-    description: Path to the SpecGov manifest.
-    required: false
-    default: .specgov.yml
+    {
+      description: "Path to .specgov.yml",
+      required: false,
+      default: ".specgov.yml",
+    }
   mode:
-    description: Enforcement mode. Use advisory for warnings only or strict to fail on governance findings.
-    required: false
-    default: advisory
-  base-ref:
-    description: Base git ref for pull request comparison.
-    required: false
-  head-ref:
-    description: Head git ref for pull request comparison.
-    required: false
-  output-format:
-    description: Report format for logs and the report-json output.
-    required: false
-    default: markdown
+    { description: "advisory or strict", required: false, default: "advisory" }
+  base-ref: { description: "Base Git ref", required: false }
+  head-ref: { description: "Head Git ref", required: false }
   changed-files:
-    description: Optional newline-delimited changed files. Overrides git diff discovery when provided.
-    required: false
-
+    { description: "Newline-delimited changed files", required: false }
+  output-format:
+    {
+      description: "terminal, markdown, or json",
+      required: false,
+      default: "terminal",
+    }
+  semantic:
+    {
+      description: "Run configured semantic auditor",
+      required: false,
+      default: "false",
+    }
+  semantic-failure-policy:
+    {
+      description: "warn or fail; manifest remains source of truth",
+      required: false,
+      default: "warn",
+    }
 outputs:
-  status:
-    description: "SpecGov status: pass, warn, fail, or error."
-  report-json:
-    description: JSON report for downstream automation.
-
+  status: { description: "pass, warn, fail, or error" }
+  report-json: { description: "Versioned analysis report JSON" }
+  graph-json: { description: "Normalized artifact graph JSON" }
+  detected-frameworks: { description: "Comma-delimited adapter IDs" }
+  finding-count: { description: "Total findings" }
 runs:
   using: node24
   main: dist/action/index.js

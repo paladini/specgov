@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.1.0 - 2026-06-28
+## 1.0.0-rc.1
 
-- Initial public CLI with `init`, `scan`, `check-pr`, `trace`, and `drift`.
-- GitHub Action for advisory or strict pull request governance checks.
-- Example manifests for docs-only, ADR-heavy, and framework-folder projects.
-- Static documentation site for adoption guidance.
+- Rebuilt SpecGov as AI-assisted development artifact governance.
+- Added Spec Kit, OpenSpec, Kiro, and Generic/TLC autodetection.
+- Added normalized graph, deterministic policies, declared metadata, and optional semantic protocol.
+- Replaced the v0.1 CLI with `init`, `check`, and `graph`.
+- Expanded GitHub Action outputs and moved to the clean `specgov/v1` manifest.
+
+## 0.1.0
+
+- Initial generic Git spec-governance release.

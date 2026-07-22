@@ -1,50 +1,19 @@
 # Releasing SpecGov
 
-SpecGov releases are tag-driven. A pushed `vX.Y.Z` tag runs the release
-workflow, validates the package, publishes the npm version when it is not
-already present, and creates or updates the matching GitHub Release.
+## Release candidate
 
-## One-time npm setup
+1. Complete the feature branch and open a PR.
+2. Pass tests, build, lint, typecheck, format, production audit, and pack checks locally and in CI.
+3. Set `1.0.0-rc.1`, commit the Action bundle, and tag `v1.0.0-rc.1` only after review.
+4. The release workflow publishes prereleases to npm `next` and creates a GitHub prerelease.
+5. Install the exact tarball in a clean external sample repository and verify every CLI command plus the Action at the immutable tag/SHA.
+6. Complete the six documented user journeys and fix release blockers.
 
-The release workflow supports both npm Trusted Publishing and an `NPM_TOKEN`
-repository secret. Trusted Publishing is preferred because it uses GitHub OIDC
-instead of a long-lived token.
+## Stable v1.0.0
 
-For Trusted Publishing, configure the npm package with:
+1. Merge the reviewed PR and repeat all gates on `main`.
+2. Set `1.0.0`, build and commit the exact bundle, then tag `v1.0.0`.
+3. The workflow publishes npm `latest`, creates an immutable GitHub Release, and moves Action tag `v1`.
+4. Verify npm metadata/install/help, external Action behavior, Pages/canonical HTTP status, release assets, topics, and repository description.
 
-- Package: `specgov`
-- Repository: `paladini/specgov`
-- Workflow: `release.yml`
-- Environment: leave blank unless the workflow is later changed to use one
-
-Docs: <https://docs.npmjs.com/trusted-publishers/>
-
-If Trusted Publishing is not configured, add an `NPM_TOKEN` secret to the
-GitHub repository before pushing a release tag.
-
-## Release a new version
-
-From a clean `main` branch:
-
-```bash
-npm version patch
-git push origin main --follow-tags
-```
-
-Use `npm version minor` or `npm version major` when the change warrants it. The
-version commit updates `package.json` and `package-lock.json`, and the tag
-triggers `.github/workflows/release.yml`.
-
-## Verify a release
-
-After the workflow completes, check:
-
-```bash
-npm view specgov version
-gh release view vX.Y.Z --repo paladini/specgov
-npx specgov@latest --help
-```
-
-The first release can be bootstrapped locally with `npm publish --access public`
-when the package has not yet been created on npm. After that, prefer the tag
-workflow.
+Never reuse a stable tag or mutate an existing release. Authentication uses GitHub OIDC/trusted publishing; do not store or print npm credentials.

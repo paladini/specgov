@@ -14,7 +14,7 @@ export interface ChangedFileOptions {
 export async function getChangedFiles(
   options: ChangedFileOptions,
 ): Promise<string[]> {
-  if (options.explicitFiles && options.explicitFiles.length > 0) {
+  if (options.explicitFiles !== undefined) {
     return uniqueNormalized(options.explicitFiles);
   }
 
