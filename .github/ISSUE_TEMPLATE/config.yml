@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/paladini/specgov/security/advisories/new
+    about: Report security vulnerabilities privately. Do not open a public issue.
+  - name: Documentation
+    url: https://paladini.io/specgov/
+    about: Read the current SpecGov documentation before filing an issue.

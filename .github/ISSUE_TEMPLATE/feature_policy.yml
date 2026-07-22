@@ -1,0 +1,42 @@
+name: Feature or policy proposal
+description: Propose a governance capability or normalized-graph policy.
+title: "[Proposal]: "
+labels: [enhancement, triage]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Governance problem
+      description: Describe the artifact-governance gap and who encounters it.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Proposed behavior
+      description: Include expected findings, evidence, remediation, and advisory/strict behavior where relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: graph
+    attributes:
+      label: Normalized graph inputs
+      description: Identify the framework-independent nodes, edges, states, or changed domains the proposal consumes.
+    validations:
+      required: true
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Compatibility and migration impact
+      description: Note changes to CLI, API, report/graph JSON, configuration, or the GitHub Action.
+    validations:
+      required: true
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Product boundaries
+      options:
+        - label: The deterministic core remains offline and provider-independent.
+          required: true
+        - label: The proposal does not infer AI authorship or treat producer declarations as proof.
+          required: true

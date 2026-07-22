@@ -1,0 +1,25 @@
+name: Question
+description: Ask for help using or integrating SpecGov.
+title: "[Question]: "
+labels: [question]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: What are you trying to accomplish?
+    validations:
+      required: true
+  - type: textarea
+    id: attempted
+    attributes:
+      label: What have you tried?
+      description: Include version, environment, sanitized configuration, command, and output where relevant.
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: I removed secrets, prompts, conversations, personal data, and private repository content.
+          required: true

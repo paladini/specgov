@@ -1,0 +1,6 @@
+# Default ownership and sensitive automation surfaces.
+* @paladini
+/.github/ @paladini
+/action.yml @paladini
+/src/ @paladini
+/.specs/ @paladini
