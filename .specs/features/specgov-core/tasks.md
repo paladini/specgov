@@ -1,5 +1,7 @@
 # SpecGov Core Tasks
 
+> **Archived v0.1 history.** These completed tasks are retained only as project history. See `ARCHIVED.md` and `../specgov-v1/tasks.md`.
+
 **Design**: `.specs/features/specgov-core/design.md`
 **Status**: Done
 

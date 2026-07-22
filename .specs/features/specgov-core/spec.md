@@ -1,5 +1,7 @@
 # SpecGov Core Specification
 
+> **Archived v0.1 history.** This document is not an active requirement source. See `ARCHIVED.md` and `../specgov-v1/spec.md`.
+
 ## Problem Statement
 
 Spec-driven development creates useful artifacts, but those artifacts drift when Git merges code changes without validating spec impact. Teams need a framework-neutral way to inventory spec artifacts, map them to code, and flag drift before it becomes institutional confusion.

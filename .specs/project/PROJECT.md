@@ -29,3 +29,12 @@
 - Treat producer metadata as declarations only.
 - Reject paths outside the repository and ignore symlinks by default.
 - Release only after package, Action, docs, and external smoke tests pass.
+
+## Delivery States
+
+- **Implemented:** the behavior exists in the repository.
+- **Locally verified:** the named local gate passed and is recorded in feature validation.
+- **Externally verified:** a separately consumed registry package, Action tag/SHA, site, or release surface passed its journey.
+- **Published:** the immutable public artifact was verified at its final destination.
+
+These states are cumulative and must be reported separately. A merge or local tarball is not evidence of publication.
