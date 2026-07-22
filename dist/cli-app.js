@@ -9,12 +9,13 @@ import { discoverArtifactGraph } from "./graph.js";
 import { exitCodeForReport, renderGraph, renderReport } from "./report.js";
 import { SpecGovError } from "./errors.js";
 export async function runCli(argv, cwd, io) {
+    const packageJson = JSON.parse(await fs.readFile(new URL("../package.json", import.meta.url), "utf8"));
     const program = new Command();
     let code = 0;
     program
         .name("specgov")
         .description("Git-native governance for AI-assisted development artifacts.")
-        .version("1.0.0-rc.1")
+        .version(packageJson.version)
         .showHelpAfterError()
         .exitOverride()
         .configureOutput({ writeOut: io.stdout, writeErr: io.stderr });
