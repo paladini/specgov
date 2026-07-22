@@ -5,10 +5,6 @@ on:
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+*"
 
-permissions:
-  contents: write
-  id-token: write
-
 concurrency:
   group: release-${{ github.ref_name }}
   cancel-in-progress: false
@@ -17,16 +13,25 @@ jobs:
   publish:
     name: Publish npm package and GitHub release
     runs-on: ubuntu-latest
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    permissions:
+      contents: write
+      id-token: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
 
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-          cache: npm
+          package-manager-cache: false
+
+      - name: Verify trusted publishing prerequisites
+        shell: bash
+        run: |
+          node --version
+          npm --version
+          npm_version="$(npm --version)"
+          node -e "const [major, minor] = process.argv[1].split('.').map(Number); if (major < 11 || (major === 11 && minor < 5)) process.exit(1)" "$npm_version"
 
       - name: Read package metadata
         id: package
@@ -81,10 +86,6 @@ jobs:
           else
             echo "published=false" >> "$GITHUB_OUTPUT"
           fi
-
-      - name: Configure npm token fallback
-        if: ${{ env.NPM_TOKEN != '' }}
-        run: npm config set //registry.npmjs.org/:_authToken "$NPM_TOKEN"
 
       - name: Publish to npm
         if: steps.npm.outputs.published == 'false'
