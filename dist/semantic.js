@@ -1,6 +1,7 @@
 import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
-export async function runSemanticAuditor(report, config) {
+const MAX_INPUT_BYTES = 1_000_000;
+export async function runSemanticAuditor(report, config, cwd) {
     if (!config.command?.length)
         throw new Error("Semantic auditing is enabled but semantic.command is missing.");
     const [file, ...args] = config.command;
@@ -10,9 +11,12 @@ export async function runSemanticAuditor(report, config) {
         changedFiles: report.changedFiles,
         deterministicFindings: report.findings,
     });
+    const inputBytes = Buffer.byteLength(input, "utf8");
+    if (inputBytes > MAX_INPUT_BYTES)
+        throw new Error(`Semantic auditor input exceeds ${MAX_INPUT_BYTES} bytes (${inputBytes} bytes).`);
     const output = await new Promise((resolve, reject) => {
         const child = execFile(file, args, {
-            cwd: process.cwd(),
+            cwd,
             timeout: config.timeout_ms,
             maxBuffer: config.max_output_bytes,
             windowsHide: true,

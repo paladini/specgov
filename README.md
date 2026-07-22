@@ -12,6 +12,8 @@ AI coding agents work from durable artifacts—intent, requirements, specs, plan
 
 ## Quick start
 
+The v1 commands below become available from npm after the current release candidate is published. Until then, clone this repository, run `npm run build`, and replace `npx specgov` with `node dist/cli.js`.
+
 ```bash
 npx specgov check
 npx specgov graph --format markdown
@@ -78,7 +80,7 @@ specgov:
 - uses: actions/checkout@v5
   with:
     fetch-depth: 0
-- uses: paladini/specgov@v1
+- uses: paladini/specgov@v1 # available after the stable v1 release
   with:
     mode: strict
     base-ref: ${{ github.event.pull_request.base.sha }}

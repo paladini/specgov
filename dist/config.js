@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
-import path from "node:path";
 import { parse, stringify } from "yaml";
 import { z } from "zod";
 import { SpecGovError } from "./errors.js";
+import { resolveRepositoryPath } from "./paths.js";
 export const DEFAULT_CONFIG_PATH = ".specgov.yml";
 const roles = [
     "intent",
@@ -84,9 +84,10 @@ export const DEFAULT_CONFIG = configSchema.parse({
 export async function loadSpecGovConfig(options = {}) {
     const cwd = options.cwd ?? process.cwd();
     const relative = options.configPath ?? DEFAULT_CONFIG_PATH;
+    const target = await resolveRepositoryPath(cwd, relative);
     let text;
     try {
-        text = await fs.readFile(path.resolve(cwd, relative), "utf8");
+        text = await fs.readFile(target, "utf8");
     }
     catch (error) {
         if (error.code === "ENOENT" &&
@@ -125,7 +126,7 @@ export function configTemplate(frameworks) {
     }, { lineWidth: 0 });
 }
 export async function writeConfig(cwd, configPath, content) {
-    const target = path.resolve(cwd, configPath);
+    const target = await resolveRepositoryPath(cwd, configPath);
     try {
         await fs.access(target);
         throw new SpecGovError(`${configPath} already exists.`);

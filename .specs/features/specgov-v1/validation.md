@@ -4,11 +4,11 @@
 
 ## Automated results
 
-- 42 Vitest tests passed across Linux, Windows, and macOS on Node.js 20, 22, and 24; 0 failed or skipped.
+- 54 Vitest tests passed locally; the CI matrix will repeat them across Linux, Windows, and macOS on Node.js 20, 22, and 24.
 - TypeScript strict typecheck, ESLint, Prettier, and ncc build passed.
 - Full `npm audit` reported 0 vulnerabilities.
-- `npm pack --dry-run` produced `specgov-1.0.0-rc.2.tgz`.
-- The exact RC2 tarball installed into a clean temporary repository; CLI help exposed only `init`, `check`, and `graph`, `check` autodetected Kiro, and `graph` emitted valid JSON.
+- The test suite packs the exact `specgov-1.0.0-rc.3.tgz`, installs it offline into a clean temporary path containing spaces, imports the public API, and executes `init`, `check`, and `graph`.
+- A deterministic corpus of 500 change sets and 1,500 artifacts completes within the 15-second local budget and produces byte-identical graphs across runs.
 - PR #6 passed the complete CI matrix, Dependency Review, and CodeQL before merge; `main` is now protected by those gates.
 - Dogfood `specgov check` detected Generic/TLC and returned pass.
 - Dogfood `specgov graph` emitted deterministic JSON.
@@ -24,6 +24,6 @@ The following six journeys are release gates. Record date, environment, exact pa
 5. **Optional semantic auditor:** verify the deterministic result with semantics disabled; enable a provider-independent argument-array auditor and verify valid versioned JSON is merged. Repeat with timeout or malformed output and verify deterministic findings remain intact and the configured failure policy applies.
 6. **External distribution surfaces:** from a separate repository, install the exact npm `next` version and execute the bundled Action at the immutable RC tag and commit SHA. Verify outputs/summary/exit behavior, GitHub prerelease assets and provenance, Pages HTTPS/canonical URL, and repository metadata. Repeat the distribution checks for npm `latest`, stable release, and Action `v1` before marking stable complete.
 
-Current status: local evidence exists for parts of journeys 1, 2, 3, 4, and 5. RC1 publication failed before creating npm or GitHub release artifacts and its immutable tag is superseded by RC2. Journey 6 and registry-installed repetitions of the other journeys remain pending.
+Current status: local evidence exists for journeys 1 through 5. RC1 and RC2 publication attempts did not create npm or GitHub release artifacts; their tags remain immutable. RC3 is the next publication candidate. Journey 6 and registry-installed repetitions of the other journeys remain pending.
 
-**Overall:** local RC implementation ready for review; not yet a verified stable release.
+**Overall:** local RC3 implementation ready for review; not yet a verified stable release.

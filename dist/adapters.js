@@ -1,6 +1,7 @@
 import fg from "fast-glob";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { resolveRepositoryPath } from "./paths.js";
 async function files(context, patterns) {
     const matched = await fg(patterns, {
         cwd: context.cwd,
@@ -9,9 +10,18 @@ async function files(context, patterns) {
         followSymbolicLinks: context.allowSymlinks,
         ignore: context.ignore,
     });
-    const safe = context.allowSymlinks
-        ? matched
-        : (await Promise.all(matched.map(async (file) => (await hasSymlinkComponent(context.cwd, file)) ? undefined : file))).filter((file) => file !== undefined);
+    const safe = (await Promise.all(matched.map(async (file) => {
+        try {
+            await resolveRepositoryPath(context.cwd, file);
+            if (!context.allowSymlinks &&
+                (await hasSymlinkComponent(context.cwd, file)))
+                return undefined;
+            return file;
+        }
+        catch {
+            return undefined;
+        }
+    }))).filter((file) => file !== undefined);
     return safe.map(posix).sort();
 }
 async function hasSymlinkComponent(cwd, file) {

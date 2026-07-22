@@ -1,6 +1,6 @@
 {
   "name": "specgov",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "description": "Git-native governance for artifacts created and consumed during AI-assisted software development.",
   "type": "module",
   "main": "dist/index.js",
@@ -58,20 +58,20 @@
     "@actions/core": "^3.0.1",
     "commander": "^15.0.0",
     "fast-glob": "^3.3.3",
-    "picomatch": "^4.0.4",
+    "picomatch": "^4.0.5",
     "yaml": "^2.9.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/node": "^26.0.1",
+    "@types/node": "^26.1.1",
     "@types/picomatch": "^4.0.3",
-    "@vercel/ncc": "^0.44.0",
-    "eslint": "^10.6.0",
-    "prettier": "^3.9.1",
+    "@vercel/ncc": "^0.44.1",
+    "eslint": "^10.7.0",
+    "prettier": "^3.9.6",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.62.0",
-    "vitest": "^4.1.9"
+    "typescript-eslint": "^8.65.0",
+    "vitest": "^4.1.10"
   },
   "types": "./dist/index.d.ts"
 }

@@ -48,7 +48,7 @@ As a team, I want to connect my own auditor without coupling SpecGov to an AI pr
 | SGV1-06 | Provide `init`, `check`, `graph` and public API              | Implemented, locally verified     |
 | SGV1-07 | Provide safe optional semantic protocol                      | Implemented, locally verified     |
 | SGV1-08 | Provide Node 24 GitHub Action contract                       | Implemented; external UAT pending |
-| SGV1-09 | Verify fixtures, e2e packaging, and performance              | Partially verified                |
+| SGV1-09 | Verify fixtures, e2e packaging, and performance              | Locally verified                  |
 | SGV1-10 | Publish accurate AI-first documentation and release surfaces | Implemented; release pending      |
 
 ## Edge Cases
@@ -61,15 +61,15 @@ As a team, I want to connect my own auditor without coupling SpecGov to an AI pr
 
 ## Requirement Traceability
 
-| Requirement | Implementation                                                  | Executable evidence                                                     | Public/operational evidence                                         |
-| ----------- | --------------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| SGV1-01     | `src/adapters.ts`, `src/analyze.ts`                             | `tests/v1.test.ts`: Spec Kit, OpenSpec, Kiro, Generic/TLC autodetection | `examples/`, README framework guide                                 |
-| SGV1-02     | `src/graph.ts`, `src/paths.ts`, `src/types.ts`                  | stable Spec Kit graph and stable report JSON tests                      | `specgov graph`, `docs/` graph documentation                        |
-| SGV1-03     | `src/metadata.ts`                                               | namespaced declared metadata test                                       | README metadata reference                                           |
-| SGV1-04     | `src/config.ts`, `src/errors.ts`                                | defaults and legacy-manifest rejection tests                            | `docs/upgrade-v1.md`                                                |
-| SGV1-05     | `src/policies.ts`, `src/git.ts`, `src/match.ts`                 | unrelated/mapped artifact and advisory/strict tests                     | README domains and policy reference                                 |
-| SGV1-06     | `src/cli-app.ts`, `src/cli.ts`, `src/index.ts`, `src/report.ts` | clean CLI, init, and render tests                                       | README quickstart and API reference                                 |
-| SGV1-07     | `src/semantic.ts`, `tools/specgov-semantic-auditor.mjs`         | provider-independent semantic protocol test                             | README semantic-auditor contract                                    |
-| SGV1-08     | `src/action.ts`, `action.yml`, `dist/action/`                   | local build gate                                                        | external Action journey pending                                     |
-| SGV1-09     | `tests/v1.test.ts`, `examples/`                                 | 15 tests, tarball install smoke, deterministic dogfood                  | performance budget and broader edge-case coverage pending           |
-| SGV1-10     | `README.md`, `docs/`, `CHANGELOG.md`, `RELEASING.md`            | format/build/package gates                                              | npm RC, GitHub prerelease, external Pages/repository checks pending |
+| Requirement | Implementation                                                  | Executable evidence                                                      | Public/operational evidence                                         |
+| ----------- | --------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------- |
+| SGV1-01     | `src/adapters.ts`, `src/analyze.ts`                             | `tests/v1.test.ts`: Spec Kit, OpenSpec, Kiro, Generic/TLC autodetection  | `examples/`, README framework guide                                 |
+| SGV1-02     | `src/graph.ts`, `src/paths.ts`, `src/types.ts`                  | stable Spec Kit graph and stable report JSON tests                       | `specgov graph`, `docs/` graph documentation                        |
+| SGV1-03     | `src/metadata.ts`                                               | namespaced declared metadata test                                        | README metadata reference                                           |
+| SGV1-04     | `src/config.ts`, `src/errors.ts`                                | defaults and legacy-manifest rejection tests                             | `docs/upgrade-v1.md`                                                |
+| SGV1-05     | `src/policies.ts`, `src/git.ts`, `src/match.ts`                 | unrelated/mapped artifact and advisory/strict tests                      | README domains and policy reference                                 |
+| SGV1-06     | `src/cli-app.ts`, `src/cli.ts`, `src/index.ts`, `src/report.ts` | clean CLI, init, and render tests                                        | README quickstart and API reference                                 |
+| SGV1-07     | `src/semantic.ts`, `tools/specgov-semantic-auditor.mjs`         | bounded provider-independent semantic protocol and repository-cwd tests  | README semantic-auditor contract                                    |
+| SGV1-08     | `src/action.ts`, `action.yml`, `dist/action/`                   | local build gate                                                         | external Action journey pending                                     |
+| SGV1-09     | `tests/`, `examples/`                                           | 54 tests, real tarball install/CLI smoke, deterministic performance gate | registry-installed repetition pending                               |
+| SGV1-10     | `README.md`, `docs/`, `CHANGELOG.md`, `RELEASING.md`            | format/build/package gates                                               | npm RC, GitHub prerelease, external Pages/repository checks pending |

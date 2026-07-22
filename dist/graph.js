@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { BUILTIN_ADAPTERS } from "./adapters.js";
 import { readDeclaredMetadata } from "./metadata.js";
 import { loadSpecGovConfig } from "./config.js";
+import { repositoryRelativePath } from "./paths.js";
 const order = [
     "intent",
     "instruction",
@@ -135,14 +136,12 @@ function selectedAdapters(config) {
         : BUILTIN_ADAPTERS.filter((a) => config.frameworks.includes(a.id));
 }
 function safeRelative(cwd, input) {
-    const absolute = path.resolve(cwd, input);
-    const relative = path.relative(cwd, absolute).replaceAll("\\", "/");
-    if (!relative ||
-        relative === "." ||
-        relative.startsWith("../") ||
-        path.isAbsolute(relative))
+    try {
+        return repositoryRelativePath(cwd, input);
+    }
+    catch {
         throw new Error(`Artifact path escapes repository: ${input}`);
-    return relative;
+    }
 }
 function stableId(adapter, file) {
     return `${adapter}:${createHash("sha256").update(`${adapter}\0${file}`).digest("hex").slice(0, 16)}`;

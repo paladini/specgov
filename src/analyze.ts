@@ -32,7 +32,7 @@ export async function analyzeRepository(
     try {
       findings = [
         ...findings,
-        ...(await runSemanticAuditor(report, effective.semantic)),
+        ...(await runSemanticAuditor(report, effective.semantic, cwd)),
       ];
     } catch (error) {
       const fail =

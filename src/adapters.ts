@@ -9,6 +9,7 @@ import type {
   FrameworkAdapter,
   RepositoryContext,
 } from "./types.js";
+import { resolveRepositoryPath } from "./paths.js";
 
 type Rule = { patterns: string[]; role: ArtifactRole };
 async function files(
@@ -22,15 +23,23 @@ async function files(
     followSymbolicLinks: context.allowSymlinks,
     ignore: context.ignore,
   });
-  const safe = context.allowSymlinks
-    ? matched
-    : (
-        await Promise.all(
-          matched.map(async (file) =>
-            (await hasSymlinkComponent(context.cwd, file)) ? undefined : file,
-          ),
-        )
-      ).filter((file): file is string => file !== undefined);
+  const safe = (
+    await Promise.all(
+      matched.map(async (file) => {
+        try {
+          await resolveRepositoryPath(context.cwd, file);
+          if (
+            !context.allowSymlinks &&
+            (await hasSymlinkComponent(context.cwd, file))
+          )
+            return undefined;
+          return file;
+        } catch {
+          return undefined;
+        }
+      }),
+    )
+  ).filter((file): file is string => file !== undefined);
   return safe.map(posix).sort();
 }
 async function hasSymlinkComponent(
