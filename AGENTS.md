@@ -45,6 +45,7 @@ Run the smallest relevant checks while iterating, then the complete gate before 
 npm ci
 npm test
 npm run build
+npm run harness:check
 npm run lint
 npm run typecheck
 npm run format:check

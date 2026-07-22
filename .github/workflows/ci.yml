@@ -39,6 +39,7 @@ jobs:
         with: { node-version: 24, cache: npm }
       - run: npm ci
       - run: npm run build
+      - run: npm run harness:check
       - run: npm run lint
       - run: npm run format:check
       - run: npm audit --omit=dev
