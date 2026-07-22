@@ -37,10 +37,8 @@ describe("package and CLI smoke", () => {
   });
 
   it("includes required release files in the npm tarball manifest", async () => {
-    const npmCli = path.join(
-      path.dirname(process.execPath),
-      "node_modules/npm/bin/npm-cli.js",
-    );
+    const npmCli = process.env.npm_execpath;
+    if (!npmCli) throw new Error("npm_execpath is required for package smoke");
     const { stdout } = await exec(
       process.execPath,
       [npmCli, "pack", "--dry-run", "--json", "--ignore-scripts"],
