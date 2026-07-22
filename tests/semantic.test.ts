@@ -103,7 +103,7 @@ describe("semantic auditor failure isolation", () => {
     await writeFixture(
       cwd,
       "auditor.mjs",
-      "process.stdin.on('end',()=>process.stdout.write(JSON.stringify({schemaVersion:'1',findings:[{code:'AUDITOR_CWD',message:process.cwd()}]}))); process.stdin.resume()",
+      "import { writeFileSync } from 'node:fs'; process.stdin.on('end',()=>{writeFileSync('auditor-cwd-marker','ok');process.stdout.write(JSON.stringify({schemaVersion:'1',findings:[{code:'AUDITOR_CWD',message:'ok'}]}))}); process.stdin.resume()",
     );
     const config = await loadSpecGovConfig({ cwd });
     config.mode = "advisory";
@@ -116,11 +116,13 @@ describe("semantic auditor failure isolation", () => {
     };
 
     const report = await analyzeRepository({ cwd, config, changedFiles: [] });
-    const canonicalCwd = await fs.realpath(cwd);
+    await expect(
+      fs.readFile(path.join(cwd, "auditor-cwd-marker"), "utf8"),
+    ).resolves.toBe("ok");
 
     expect(report.findings).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ code: "AUDITOR_CWD", message: canonicalCwd }),
+        expect.objectContaining({ code: "AUDITOR_CWD" }),
       ]),
     );
   });
