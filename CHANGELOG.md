@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.0-rc.3
+
+- Confined manifests, graph output, declared relations, and followed symlinks to the repository root.
+- Bounded semantic-auditor input and executed auditors from the analyzed repository.
+- Added real packed-package installation, CLI execution, and deterministic performance gates.
+- Removed superseded v0.1 specs, examples, and unused documentation assets.
+- Updated maintained dependencies and GitHub Actions without adopting the currently incompatible TypeScript 7 line.
+
 ## 1.0.0-rc.2
 
 - Added a portable repository harness and automated contract-drift gate.

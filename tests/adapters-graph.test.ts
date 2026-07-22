@@ -68,18 +68,42 @@ describe("adapters and normalized graph", () => {
     expect(second).toBe(first);
   });
 
-  it("does not follow directory symlinks unless enabled", async () => {
+  it("follows only repository-internal directory symlinks when enabled", async () => {
     const cwd = await makeRepo();
     const external = await makeRepo();
+    await writeFixture(cwd, "internal/linked/spec.md");
     await writeFixture(external, "linked/spec.md");
     await fs.mkdir(path.join(cwd, ".specs"), { recursive: true });
-    await fs.symlink(external, path.join(cwd, ".specs/features"), "junction");
+    await fs.symlink(
+      path.join(cwd, "internal"),
+      path.join(cwd, ".specs/features"),
+      "junction",
+    );
+    await fs.symlink(external, path.join(cwd, ".specs/external"), "junction");
     const blocked = await discoverArtifactGraph({ cwd });
     expect(blocked.artifacts).toHaveLength(0);
-    await writeConfig(cwd, "allow_symlinks: true\n");
+    await writeConfig(
+      cwd,
+      "allow_symlinks: true\ngeneric:\n  roots: [.specs/features, .specs/external]\n  roles: []\n",
+    );
     const allowed = await discoverArtifactGraph({ cwd });
     expect(allowed.artifacts.map((item) => item.path)).toContain(
       ".specs/features/linked/spec.md",
+    );
+    expect(allowed.artifacts.map((item) => item.path)).not.toContain(
+      ".specs/external/linked/spec.md",
+    );
+  });
+
+  it("rejects repository-escaping declared relation targets", async () => {
+    const cwd = await makeRepo();
+    await writeFixture(
+      cwd,
+      ".specs/features/auth/spec.md",
+      "---\nspecgov:\n  relations:\n    - target: ../../../../outside.md\n      type: derives_from\n---\n",
+    );
+    await expect(discoverArtifactGraph({ cwd })).rejects.toThrow(
+      "escapes repository",
     );
   });
 

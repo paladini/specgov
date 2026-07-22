@@ -1,3 +1,5 @@
+import fs from "node:fs/promises";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { analyzeRepository, loadSpecGovConfig } from "../src/index.js";
 import { makeRepo, writeFixture } from "./helpers.js";
@@ -5,6 +7,7 @@ import { makeRepo, writeFixture } from "./helpers.js";
 async function semanticReport(
   script: string,
   mode: "advisory" | "strict" = "strict",
+  timeoutMs = 4_000,
 ) {
   const cwd = await makeRepo();
   await writeFixture(cwd, "auditor.mjs", script);
@@ -13,7 +16,7 @@ async function semanticReport(
   config.semantic = {
     enabled: true,
     command: [process.execPath, `${cwd}/auditor.mjs`],
-    timeout_ms: 200,
+    timeout_ms: timeoutMs,
     max_output_bytes: 1_000,
     failure_policy: "fail",
   };
@@ -22,14 +25,17 @@ async function semanticReport(
 
 describe("semantic auditor failure isolation", () => {
   it.each([
-    ["malformed JSON", "process.stdin.resume(); process.stdout.write('nope')"],
+    [
+      "malformed JSON",
+      "process.stdin.on('end',()=>process.stdout.write('nope')); process.stdin.resume()",
+    ],
     [
       "unsupported schema",
-      "process.stdin.resume(); process.stdout.write(JSON.stringify({schemaVersion:'2',findings:[]}))",
+      "process.stdin.on('end',()=>process.stdout.write(JSON.stringify({schemaVersion:'2',findings:[]}))); process.stdin.resume()",
     ],
     [
       "nonzero exit",
-      "process.stdin.resume(); process.stderr.write('boom'); process.exitCode=3",
+      "process.stdin.on('end',()=>{process.stderr.write('boom'); process.exitCode=3}); process.stdin.resume()",
     ],
   ])("preserves deterministic findings for %s", async (_name, script) => {
     const report = await semanticReport(script);
@@ -42,6 +48,8 @@ describe("semantic auditor failure isolation", () => {
   it("bounds auditor execution time", async () => {
     const report = await semanticReport(
       "process.stdin.resume(); setTimeout(()=>{}, 10_000)",
+      "strict",
+      200,
     );
     expect(report.findings.map((finding) => finding.code)).toContain(
       "SEMANTIC_AUDITOR_FAILED",
@@ -50,16 +58,78 @@ describe("semantic auditor failure isolation", () => {
 
   it("bounds auditor output", async () => {
     const report = await semanticReport(
-      "process.stdin.resume(); process.stdout.write('x'.repeat(10_000))",
+      "process.stdin.on('end',()=>process.stdout.write('x'.repeat(10_000))); process.stdin.resume()",
     );
     expect(report.findings.map((finding) => finding.code)).toContain(
       "SEMANTIC_AUDITOR_FAILED",
     );
   });
 
+  it("rejects oversized input before starting the auditor", async () => {
+    const cwd = await makeRepo();
+    await writeFixture(
+      cwd,
+      "auditor.mjs",
+      "await import('node:fs/promises').then(fs => fs.writeFile('started', 'yes')); process.stdin.resume()",
+    );
+    const config = await loadSpecGovConfig({ cwd });
+    config.semantic = {
+      enabled: true,
+      command: [process.execPath, path.join(cwd, "auditor.mjs")],
+      timeout_ms: 10_000,
+      max_output_bytes: 1_000,
+      failure_policy: "fail",
+    };
+
+    const report = await analyzeRepository({
+      cwd,
+      config,
+      changedFiles: [`src/${"x".repeat(1_000_000)}.ts`],
+    });
+
+    expect(report.findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: "SEMANTIC_AUDITOR_FAILED",
+          message: expect.stringContaining("input exceeds 1000000 bytes"),
+        }),
+      ]),
+    );
+    await expect(fs.access(path.join(cwd, "started"))).rejects.toThrow();
+  });
+
+  it("runs the auditor from the analyzed repository root", async () => {
+    const cwd = await makeRepo();
+    await writeFixture(
+      cwd,
+      "auditor.mjs",
+      "import { writeFileSync } from 'node:fs'; process.stdin.on('end',()=>{writeFileSync('auditor-cwd-marker','ok');process.stdout.write(JSON.stringify({schemaVersion:'1',findings:[{code:'AUDITOR_CWD',message:'ok'}]}))}); process.stdin.resume()",
+    );
+    const config = await loadSpecGovConfig({ cwd });
+    config.mode = "advisory";
+    config.semantic = {
+      enabled: true,
+      command: [process.execPath, path.join(cwd, "auditor.mjs")],
+      timeout_ms: 10_000,
+      max_output_bytes: 1_000,
+      failure_policy: "fail",
+    };
+
+    const report = await analyzeRepository({ cwd, config, changedFiles: [] });
+    await expect(
+      fs.readFile(path.join(cwd, "auditor-cwd-marker"), "utf8"),
+    ).resolves.toBe("ok");
+
+    expect(report.findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ code: "AUDITOR_CWD" }),
+      ]),
+    );
+  });
+
   it("accepts and normalizes a valid versioned finding", async () => {
     const report = await semanticReport(
-      "process.stdin.resume(); process.stdout.write(JSON.stringify({schemaVersion:'1',findings:[{code:'SEMANTIC_REVIEW',severity:'info',message:'Review intent',artifactIds:[],evidence:['audited'],suggestion:'Inspect it'}]}))",
+      "process.stdin.on('end',()=>process.stdout.write(JSON.stringify({schemaVersion:'1',findings:[{code:'SEMANTIC_REVIEW',severity:'info',message:'Review intent',artifactIds:[],evidence:['audited'],suggestion:'Inspect it'}]}))); process.stdin.resume()",
       "advisory",
     );
     expect(report.findings).toEqual(

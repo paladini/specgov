@@ -24,7 +24,7 @@ Read these before changing behavior:
 4. `.specs/features/specgov-v1/tasks.md` and `validation.md`
 5. `CONTRIBUTING.md`, `SECURITY.md`, and `RELEASING.md` when the change affects their domains
 
-The v1 spec defines behavior. Tests provide executable evidence. Validation records distinguish local verification from external publication. The archived `specgov-core` documents describe v0.1 only and are not current requirements.
+The v1 spec defines behavior. Tests provide executable evidence. Validation records distinguish local verification from external publication. Historical v0.1 contracts remain available in Git history; `docs/upgrade-v1.md` is the maintained migration reference.
 
 ## Change contract
 

@@ -13,6 +13,7 @@ import type {
   SpecGovConfig,
 } from "./types.js";
 import { loadSpecGovConfig } from "./config.js";
+import { repositoryRelativePath } from "./paths.js";
 
 const order: ArtifactRole[] = [
   "intent",
@@ -163,16 +164,11 @@ function selectedAdapters(config: SpecGovConfig): FrameworkAdapter[] {
     : BUILTIN_ADAPTERS.filter((a) => config.frameworks.includes(a.id));
 }
 function safeRelative(cwd: string, input: string): string {
-  const absolute = path.resolve(cwd, input);
-  const relative = path.relative(cwd, absolute).replaceAll("\\", "/");
-  if (
-    !relative ||
-    relative === "." ||
-    relative.startsWith("../") ||
-    path.isAbsolute(relative)
-  )
+  try {
+    return repositoryRelativePath(cwd, input);
+  } catch {
     throw new Error(`Artifact path escapes repository: ${input}`);
-  return relative;
+  }
 }
 function stableId(adapter: string, file: string): string {
   return `${adapter}:${createHash("sha256").update(`${adapter}\0${file}`).digest("hex").slice(0, 16)}`;

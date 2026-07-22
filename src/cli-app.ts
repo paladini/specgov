@@ -1,5 +1,4 @@
 import fs from "node:fs/promises";
-import path from "node:path";
 import readline from "node:readline/promises";
 import { Command, InvalidArgumentError } from "commander";
 import { analyzeRepository } from "./analyze.js";
@@ -9,6 +8,7 @@ import { discoverArtifactGraph } from "./graph.js";
 import { exitCodeForReport, renderGraph, renderReport } from "./report.js";
 import { SpecGovError } from "./errors.js";
 import type { EnforcementMode, OutputFormat } from "./types.js";
+import { resolveRepositoryPath } from "./paths.js";
 
 export interface CliIo {
   stdout: (text: string) => void;
@@ -124,7 +124,8 @@ export async function runCli(
         });
         const text = renderGraph(graph, o.format);
         if (o.out) {
-          await fs.writeFile(path.resolve(cwd, o.out), text, "utf8");
+          const target = await resolveRepositoryPath(cwd, o.out);
+          await fs.writeFile(target, text, "utf8");
           io.stdout(`Wrote ${o.out}\n`);
         } else io.stdout(text);
       },

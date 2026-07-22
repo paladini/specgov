@@ -1,5 +1,6 @@
 import { execFile } from "node:child_process";
 import fs from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
 import { describe, expect, it } from "vitest";
@@ -78,4 +79,96 @@ describe("package and CLI smoke", () => {
       ]),
     );
   });
+
+  it("installs the tarball and runs the public API and CLI", async () => {
+    const npmCli = process.env.npm_execpath;
+    if (!npmCli) throw new Error("npm_execpath is required for package smoke");
+
+    const temporaryRoot = await fs.mkdtemp(
+      path.join(os.tmpdir(), "specgov package smoke "),
+    );
+    const packageDirectory = path.join(temporaryRoot, "package");
+    const consumerDirectory = path.join(temporaryRoot, "consumer with spaces");
+    await fs.mkdir(packageDirectory);
+    await fs.mkdir(consumerDirectory);
+
+    try {
+      const { stdout } = await exec(
+        process.execPath,
+        [
+          npmCli,
+          "pack",
+          "--json",
+          "--ignore-scripts",
+          "--pack-destination",
+          packageDirectory,
+        ],
+        { cwd: root, maxBuffer: 5_000_000 },
+      );
+      const [packed] = JSON.parse(stdout) as Array<{ filename: string }>;
+      if (!packed) throw new Error("npm pack did not return a tarball");
+      const tarball = path.join(packageDirectory, packed.filename);
+
+      await fs.writeFile(
+        path.join(consumerDirectory, "package.json"),
+        '{"name":"specgov-package-consumer","private":true,"type":"module"}\n',
+      );
+      await exec(
+        process.execPath,
+        [
+          npmCli,
+          "install",
+          tarball,
+          "--ignore-scripts",
+          "--no-audit",
+          "--no-fund",
+        ],
+        { cwd: consumerDirectory, maxBuffer: 5_000_000 },
+      );
+
+      const cli = path.join(
+        consumerDirectory,
+        "node_modules",
+        "specgov",
+        "dist",
+        "cli.js",
+      );
+      const imported = await exec(
+        process.execPath,
+        [
+          "--input-type=module",
+          "--eval",
+          "import('specgov').then(m => { if (typeof m.discoverArtifactGraph !== 'function') process.exit(1) })",
+        ],
+        { cwd: consumerDirectory },
+      );
+      expect(imported.stderr).toBe("");
+
+      const initialized = await exec(
+        process.execPath,
+        [cli, "init", "--dry-run"],
+        { cwd: consumerDirectory },
+      );
+      expect(initialized.stdout).toContain("schema: specgov/v1");
+      await fs.writeFile(
+        path.join(consumerDirectory, ".specgov.yml"),
+        "schema: specgov/v1\nmode: advisory\nframeworks: auto\n",
+      );
+      const checked = await exec(
+        process.execPath,
+        [cli, "check", "--changed-file", "README.md", "--format", "json"],
+        { cwd: consumerDirectory },
+      );
+      expect(JSON.parse(checked.stdout)).toMatchObject({
+        schemaVersion: "1",
+        status: expect.any(String),
+      });
+      const graphed = await exec(process.execPath, [cli, "graph"], {
+        cwd: consumerDirectory,
+      });
+      expect(JSON.parse(graphed.stdout)).toMatchObject({ schemaVersion: "1" });
+    } finally {
+      await fs.rm(temporaryRoot, { recursive: true, force: true });
+    }
+  }, 60_000);
 });

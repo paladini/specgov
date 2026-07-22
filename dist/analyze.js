@@ -23,7 +23,7 @@ export async function analyzeRepository(options = {}) {
         try {
             findings = [
                 ...findings,
-                ...(await runSemanticAuditor(report, effective.semantic)),
+                ...(await runSemanticAuditor(report, effective.semantic, cwd)),
             ];
         }
         catch (error) {

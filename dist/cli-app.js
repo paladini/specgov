@@ -1,5 +1,4 @@
 import fs from "node:fs/promises";
-import path from "node:path";
 import readline from "node:readline/promises";
 import { Command, InvalidArgumentError } from "commander";
 import { analyzeRepository } from "./analyze.js";
@@ -8,6 +7,7 @@ import { configTemplate, DEFAULT_CONFIG_PATH, writeConfig } from "./config.js";
 import { discoverArtifactGraph } from "./graph.js";
 import { exitCodeForReport, renderGraph, renderReport } from "./report.js";
 import { SpecGovError } from "./errors.js";
+import { resolveRepositoryPath } from "./paths.js";
 export async function runCli(argv, cwd, io) {
     const packageJson = JSON.parse(await fs.readFile(new URL("../package.json", import.meta.url), "utf8"));
     const program = new Command();
@@ -91,7 +91,8 @@ export async function runCli(argv, cwd, io) {
         });
         const text = renderGraph(graph, o.format);
         if (o.out) {
-            await fs.writeFile(path.resolve(cwd, o.out), text, "utf8");
+            const target = await resolveRepositoryPath(cwd, o.out);
+            await fs.writeFile(target, text, "utf8");
             io.stdout(`Wrote ${o.out}\n`);
         }
         else
