@@ -1,0 +1,48 @@
+name: Framework adapter proposal
+description: Propose support for an artifact or spec workflow.
+title: "[Adapter]: "
+labels: [enhancement, adapter, triage]
+body:
+  - type: input
+    id: framework
+    attributes:
+      label: Framework and version
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Official convention source
+      description: Link to primary documentation defining paths, filenames, roles, and lifecycle.
+    validations:
+      required: true
+  - type: textarea
+    id: artifacts
+    attributes:
+      label: Artifact model
+      description: Describe canonical roots, roles, relationships, lifecycle states, and optional files.
+    validations:
+      required: true
+  - type: textarea
+    id: detection
+    attributes:
+      label: Deterministic detection
+      description: Explain how SpecGov can detect this workflow offline without guessing authorship.
+    validations:
+      required: true
+  - type: textarea
+    id: fixtures
+    attributes:
+      label: Canonical fixture
+      description: Link to or describe the smallest public example that can become a test fixture.
+    validations:
+      required: true
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Product boundaries
+      options:
+        - label: The proposal does not require network access, an account, or an LLM for deterministic discovery.
+          required: true
+        - label: The proposal treats producer metadata as a declaration, not verified provenance.
+          required: true

@@ -1,0 +1,52 @@
+name: Bug report
+description: Report reproducible incorrect behavior in SpecGov.
+title: "[Bug]: "
+labels: [bug, triage]
+body:
+  - type: markdown
+    attributes:
+      value: Before filing, search existing issues and remove secrets, prompts, conversations, and private repository data.
+  - type: input
+    id: version
+    attributes:
+      label: SpecGov version
+      description: Output of `specgov --version` or the exact npm/Action reference.
+      placeholder: 1.0.0-rc.1
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, Node.js version, and local CLI or GitHub Action.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Provide sanitized files, configuration, Git refs, and exact commands needed to reproduce the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and output
+      description: Include exit codes and sanitized output. Use code fences for logs.
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: I removed secrets, prompts, conversations, personal data, and private repository content.
+          required: true
+        - label: This is not a security vulnerability (those must follow SECURITY.md).
+          required: true

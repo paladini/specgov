@@ -1,5 +1,7 @@
 # SpecGov Core Design
 
+> **Archived v0.1 history.** This design describes removed legacy contracts. See `ARCHIVED.md` and `../specgov-v1/design.md`.
+
 **Spec**: `.specs/features/specgov-core/spec.md`
 **Status**: Approved
 
