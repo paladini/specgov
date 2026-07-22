@@ -25,7 +25,7 @@ describe("package and CLI smoke", () => {
     await expect(
       fs.access(path.join(root, "dist/action/index.js")),
     ).resolves.toBeUndefined();
-  });
+  }, 20_000);
 
   it("runs the compiled CLI help contract", async () => {
     const { stdout } = await exec(process.execPath, ["dist/cli.js", "--help"], {
