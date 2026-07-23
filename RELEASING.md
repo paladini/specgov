@@ -17,3 +17,9 @@
 4. Verify npm metadata/install/help, external Action behavior, Pages/canonical HTTP status, release assets, topics, and repository description.
 
 Never reuse a stable tag or mutate an existing release. Authentication uses GitHub OIDC/trusted publishing; do not store or print npm credentials.
+
+## GitHub Packages (`@paladini/specgov`)
+
+Tag pushes that trigger the release workflow also publish a scoped copy to GitHub Packages as `@paladini/specgov` (public). The npmjs package name and publish path stay `specgov`.
+
+To publish the current `package.json` version to GitHub Packages only (no npmjs republish, no new GitHub Release), run **Actions → Release → Run workflow** (`workflow_dispatch`) on the desired ref.
