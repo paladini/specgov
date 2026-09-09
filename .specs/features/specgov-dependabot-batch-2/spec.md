@@ -1,6 +1,6 @@
 # SpecGov Dependabot Batch 2
 
-**Scope:** Medium | **Status:** Executing
+**Scope:** Medium | **Status:** Complete
 
 ## Problem Statement
 
@@ -34,6 +34,6 @@ Open Dependabot PRs on `paladini/specgov` block repository hygiene: PR #10 has m
 | ID     | Verified by                                                              |
 | ------ | ------------------------------------------------------------------------ |
 | SG2-01 | `pages.yml` line with `upload-pages-artifact@...# v5.0.0`; PR #10 closed |
-| SG2-02 | PR #25 state MERGED                                                      |
-| SG2-03 | PRs #28, #30, #31 state MERGED                                           |
+| SG2-02 | PR #33 merged (supersedes #25); #25 closed                               |
+| SG2-03 | PRs #34–#35 merged (supersede #28/#30/#31); originals closed             |
 | SG2-04 | `gh run list` CI success on `main`                                       |
