@@ -4,7 +4,7 @@
 
 **The Git-native governance layer for artifacts created and consumed during AI-assisted software development.**
 
-AI coding agents work from durable artifactsÔÇöintent, requirements, specs, plans, designs, tasks, and evidenceÔÇöbut Git does not ensure those artifacts still describe the code. SpecGov autodetects common spec workflows, builds a normalized artifact graph, and reports incomplete chains or code changes that bypass their governing artifacts.
+AI coding agents work from durable artifacts—intent, requirements, specs, plans, designs, tasks, and evidence—but Git does not ensure those artifacts still describe the code. SpecGov autodetects common spec workflows, builds a normalized artifact graph, and reports incomplete chains or code changes that bypass their governing artifacts.
 
 - AI-first, agent-agnostic, and framework-agnostic.
 - Local and deterministic by default; no account, API key, upload, or network call.
@@ -61,7 +61,7 @@ SpecGov is not another spec-authoring framework. It governs the files those fram
 
 ## Declared metadata
 
-Optional namespaced frontmatter can declare lifecycle, scope, ownership, relations, and producer context. Producer fields are declarationsÔÇönot verified provenanceÔÇöand SpecGov never infers AI authorship.
+Optional namespaced frontmatter can declare lifecycle, scope, ownership, relations, and producer context. Producer fields are declarations—not verified provenance—and SpecGov never infers AI authorship.
 
 ```yaml
 specgov:
@@ -122,4 +122,4 @@ npm audit --omit=dev
 npm pack --dry-run
 ```
 
-MIT ┬® Fernando Paladini. See [Security](SECURITY.md), [Contributing](CONTRIBUTING.md), and [Releasing](RELEASING.md).
+MIT © Fernando Paladini. See [Security](SECURITY.md), [Contributing](CONTRIBUTING.md), and [Releasing](RELEASING.md).
