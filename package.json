@@ -58,9 +58,9 @@
     "@actions/core": "^3.0.1",
     "commander": "^15.0.0",
     "fast-glob": "^3.3.3",
-    "picomatch": "^4.0.4",
+    "picomatch": "^4.0.7",
     "yaml": "^2.9.0",
-    "zod": "^4.4.3"
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
