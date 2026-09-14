@@ -64,15 +64,15 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/node": "^26.1.1",
+    "@types/node": "^26.5.1",
     "@types/picomatch": "^4.0.3",
-    "@vercel/ncc": "^0.44.1",
-    "eslint": "^10.8.0",
-    "harness-score": "^1.5.1",
+    "@vercel/ncc": "^0.45.0",
+    "eslint": "^10.10.0",
+    "harness-score": "^1.6.5",
     "prettier": "^3.9.6",
-    "typescript": "^6.0.3",
-    "typescript-eslint": "^8.65.0",
-    "vitest": "^4.1.11"
+    "typescript": "^7.0.2",
+    "typescript-eslint": "^8.70.0",
+    "vitest": "^5.0.0"
   },
   "types": "./dist/index.d.ts"
 }
