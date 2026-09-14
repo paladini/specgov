@@ -60,7 +60,7 @@
     "fast-glob": "^3.3.3",
     "picomatch": "^4.0.7",
     "yaml": "^2.9.0",
-    "zod": "^4.5.4"
+    "zod": "^4.6.2"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
