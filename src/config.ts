@@ -89,6 +89,9 @@ export const DEFAULT_CONFIG: SpecGovConfig = configSchema.parse({
   schema: "specgov/v1",
 });
 
+/**
+ * Load and validate `.specgov.yml` from a repository, falling back to defaults when absent.
+ */
 export async function loadSpecGovConfig(
   options: { cwd?: string; configPath?: string; optional?: boolean } = {},
 ): Promise<SpecGovConfig> {

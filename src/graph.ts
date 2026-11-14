@@ -25,6 +25,9 @@ const order: ArtifactRole[] = [
   "implementation",
   "evidence",
 ];
+/**
+ * Discover spec artifacts and relations using built-in and configured framework adapters.
+ */
 export async function discoverArtifactGraph(
   options: DiscoverGraphOptions = {},
 ): Promise<ArtifactGraph> {

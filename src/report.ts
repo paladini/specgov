@@ -1,4 +1,7 @@
 import type { ArtifactGraph, OutputFormat, SpecGovReport } from "./types.js";
+/**
+ * Format a SpecGov report for terminal, Markdown, or JSON output.
+ */
 export function renderReport(
   report: SpecGovReport,
   format: OutputFormat = "terminal",

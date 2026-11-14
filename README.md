@@ -1,6 +1,7 @@
 # SpecGov
 
 <a href="https://paladini.io/harness-score/guide/maturity-model#l1-%C2%B7-documented" title="Harness Score — AI coding harness maturity"><img alt="Harness Score L1 (Documented): measures AI-assisted development harness maturity with harness-score" src="https://paladini.github.io/harness-score/maturity/badge-l1.svg" height="20"></a>
+[![JSR](https://jsr.io/badges/@paladini/specgov)](https://jsr.io/@paladini/specgov)
 
 **The Git-native governance layer for artifacts created and consumed during AI-assisted software development.**
 
@@ -21,6 +22,20 @@ npx specgov init --dry-run
 ```
 
 `check` reports detected frameworks, change sets, artifact roles, findings, evidence, and exact remediation. Advisory mode never blocks on policy findings; strict mode returns exit code 1. Configuration/runtime errors return 2.
+
+### Install from JSR
+
+CLI and library are published on [JSR](https://jsr.io/@paladini/specgov) as `@paladini/specgov`.
+
+```bash
+npx jsr add @paladini/specgov
+```
+
+```bash
+deno run -A jsr:@paladini/specgov/cli check
+```
+
+**Runtime compatibility:** Node.js **≥ 20** for npm installs and the GitHub Action. JSR consumers (Deno or Node via `jsr:`) need read access to the repository tree and git metadata for full analysis.
 
 ## Configuration
 
@@ -98,6 +113,12 @@ import {
   loadSpecGovConfig,
   renderReport,
 } from "specgov";
+```
+
+From JSR (Deno or npm with JSR):
+
+```ts
+import { analyzeRepository, renderReport } from "jsr:@paladini/specgov";
 ```
 
 ## What deterministic governance proves
