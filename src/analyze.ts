@@ -11,6 +11,9 @@ import type {
   SpecGovReport,
 } from "./types.js";
 
+/**
+ * Analyze a repository: discover artifacts, map changes, run policies, and build a report.
+ */
 export async function analyzeRepository(
   options: AnalyzeRepositoryOptions = {},
 ): Promise<SpecGovReport> {
